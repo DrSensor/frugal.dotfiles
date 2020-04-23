@@ -1,0 +1,34 @@
+@theme	"base-theme"
+
+window {
+    location: south;
+    background-color: #0000;
+    spacing: 0px;
+    padding: 0px;
+    border: 0px;
+    children: [ inputbar, listview  ];
+}
+
+inputbar {
+    background-color: #0000;
+    spacing: 0px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    border: 5px 0px 5px 0px;
+    border-color: #222;
+}
+
+entry {
+    border: 5px 6px 5px 0px;
+    border-color: #222;
+}
+
+listview {
+    columns: 100;
+    lines: 2;
+    layout: vertical;
+    dynamic: true;
+    fixed-height: false;
+}

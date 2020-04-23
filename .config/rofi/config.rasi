@@ -1,0 +1,29 @@
+configuration {
+   terminal: "kitty";
+   show-icons: true;
+   kb-row-tab: "";
+   kb-row-select: "Tab";
+   line-margin: 0;
+   line-padding: 1;
+   drun-display-format: "{name}";
+   display-drun: "";
+   display-run: "";
+   display-windowcd: "window: ";
+   display-window: "window in all workspaces: ";
+}
+
+@theme "base-theme"
+
+window {
+    location: north;
+    children: [ dmenu ];
+}
+
+dmenu {
+    orientation: horizontal;
+    children: [ inputbar, listview ];
+}
+
+listview {
+    layout: horizontal;
+}

@@ -1,0 +1,15 @@
+@theme "base-theme"
+
+window {
+    location: north;
+    children: [ dmenu ];
+}
+
+dmenu {
+    orientation: horizontal;
+    children: [ entry, listview ];
+}
+
+listview {
+    layout: horizontal;
+}

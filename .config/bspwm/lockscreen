@@ -1,0 +1,15 @@
+#!/bin/sh
+max() {
+  xrandr --current \
+  | grep '*' | uniq | awk '{print $1}' \
+  | cut -d 'x' `([ $1 = 'W' ] && echo '-f1') || ([ $1 = 'H' ] && echo '-f2')` \
+  | sort -n | tail -1
+}
+
+convert $1 -resize `max W`x`max H` rgb:- | \
+i3lock --raw `max W`x`max H`:rgb --image /dev/stdin \
+       --ignore-empty-password \
+       --show-failed-attempts \
+       --pointer default \
+       --tiling
+       # --color 565656

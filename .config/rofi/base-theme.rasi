@@ -1,0 +1,32 @@
+* {
+    background-color:	#222;
+    border-color:	White;
+    text-color:		White;
+}
+
+window {
+    padding:	2px;
+}
+
+listview {
+    spacing:	5px;
+}
+
+prompt {
+    font: "hack 11";
+}
+entry {
+    font: "hack 11";
+    background-color: #333;
+    expand:	false;
+    width:	10em;
+}
+
+element {
+    padding:	3px 7px;
+    font:	"sans-serif 11";
+}
+element selected {
+    background-color: #66f6;
+}
+

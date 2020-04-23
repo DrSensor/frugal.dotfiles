@@ -1,14 +1,36 @@
 #
 # wm independent hotkeys
-#
+
 
 # terminal emulator
 super + Return
-	urxvt
+	kitty -1 --instance-group `bspc query -D --desktop --names`
+
+# terminal emulator
+super + @Home
+	vimb
+
+# TODO: printscreen
+# TODO: rofi list sxhkd keybindings
+# TODO: rofi list and copy emoji
+# TODO: rofi list active PID then show it's resources (e.g memory, network)
 
 # program launcher
-super + @space
-	dmenu_run
+alt + space
+	rofi -switchers drun,run -show drun \
+	     -width 100% -theme ~/.config/rofi/runner.rasi
+
+# TODO: cache cover of the books and display it as an icons
+# read a book
+alt + @b; alt + space
+	books=~/Documents/books; \
+	selected=`ls $books | rofi -i -dmenu -p 'Books: ' -width 100%` && \
+	zathura "$books/$selected"
+
+# window switcher
+alt + Tab
+	rofi -switchers window,windowcd -show windowcd \
+	     -width 100% -theme ~/.config/rofi/window.rasi
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -36,43 +58,85 @@ super + y
 
 # swap the current node and the biggest node
 super + g
-	bspc node -s biggest
+	bspc node --swap biggest
 
 #
 # state/flags
 #
 
-# set the window state
-super + {t,shift + t,s,f}
-	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+# increment state: floating -> pseudo_tiled -> tiled -> monocle -> fullscreen
+super + @Page_Up
+	case `bspc query -T --node | jq .client.state -r` in \
+	  "floating") bspc node --state pseudo_tiled ;; \
+	  "pseudo_tiled") bspc node --state tiled ;; \
+	  "tiled") case `bspc query -T --desktop | jq .layout -r` in \
+	    "tiled") bspc desktop --layout monocle ;; \
+	    "monocle") bspc node --state fullscreen ;; \
+	  esac;; \
+	esac
+
+# decrement state: fullscreen -> monocle -> tiled -> pseudo_tiled -> floating
+super + @Page_Down
+	case `bspc query -T --node | jq .client.state -r` in \
+	  "fullscreen") bspc node --state tiled ;; \
+	  "tiled") case `bspc query -T --desktop | jq .layout -r` in \
+	    "monocle") bspc desktop --layout tiled ;; \
+	    "tiled") bspc node --state pseudo_tiled ;; \
+	  esac;; \
+	  "pseudo_tiled") bspc node --state floating ;; \
+	esac
 
 # set the node flags
 super + ctrl + {m,x,y,z}
-	bspc node -g {marked,locked,sticky,private}
+	bspc node --flag {marked,locked,sticky,private}
 
 #
 # focus/swap
 #
 
+# [KDE] focus the node in the given direction
+super + {_,shift + }{Left,Down,Up,Right}
+	bspc node --{focus,swap} {west,south,north,east}
+
 # focus the node in the given direction
 super + {_,shift + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
+	bspc node --{focus,swap} {west,south,north,east}
 
 # focus the node for the given path jump
 super + {p,b,comma,period}
-	bspc node -f @{parent,brother,first,second}
+	bspc node --focus @{parent,brother,first,second}
 
 # focus the next/previous node in the current desktop
 super + {_,shift + }c
-	bspc node -f {next,prev}.local
+	bspc node --focus {next,prev}.local
 
 # focus the next/previous desktop in the current monitor
 super + bracket{left,right}
-	bspc desktop -f {prev,next}.local
+	bspc desktop --focus {prev,next}.local
+
+# send node to the next/previous desktop
+super + shift + bracket{left,right}
+	bspc node --to-desktop {prev,next} --follow
+
+# [KDE] focus the next/previous desktop in the current monitor
+super + ctrl + {Left,Right}
+	bspc desktop --focus {prev,next}.local
+
+# [KDE] send node to the next/previous desktop
+super + ctrl + shift + {Left,Right}
+	bspc node --to-desktop {prev,next} --follow
+
+# [KDE] focus the next/previous monitor
+super + ctrl + {Down,Up}
+	bspc monitor --focus {prev,next}.local
+
+# [KDE] send node to the next/previous monitor
+super + ctrl + shift + {Down,Up}
+	bspc node --to-monitor {prev,next} --follow
 
 # focus the last node/desktop
 super + {grave,Tab}
-	bspc {node,desktop} -f last
+	bspc {node,desktop} --focus last
 
 # focus the older or newer node in the focus history
 super + {o,i}
@@ -109,13 +173,51 @@ super + ctrl + shift + space
 #
 
 # expand a window by moving one of its side outward
+super + {_,alt} + {_,shift} + backslash
+	bspc node @{/,parent} --rotate {90,-90}
+
+# expand a window by moving one of its side outward
 super + alt + {h,j,k,l}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+	bspc node --resize {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 # contract a window by moving one of its side inward
 super + alt + shift + {h,j,k,l}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+	bspc node --resize {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# resize a window horizontally
+super + shift + {equal,minus}
+	for z in {'left -' 'right ','right -' 'left '}; \
+	  do bspc node --resize $z\20 0; \
+	done
+
+# resize a window vertically
+super + alt + {equal,minus}
+	for z in {'bottom 0 ' 'top 0 -','top 0 ' 'bottom 0 -'}; \
+	  do bspc node --resize $z\20; \
+	done
+
+# resize a window on all sides
+super + {equal,minus}
+	for z in {'left -' 'right ' 'bottom 0 ' 'top 0 -', \
+	          'right -' 'left ' 'top 0 ' 'bottom 0 -'}; \
+	  do bspc node --resize $z\20 0; \
+	done
 
 # move a floating window
-super + {Left,Down,Up,Right}
-	bspc node -v {-20 0,0 20,0 -20,20 0}
+super + alt + {Left,Down,Up,Right}
+	bspc node --move {-20 0,0 20,0 -20,20 0}
+# BUG: conflict with expand-window
+# super + alt + {h,j,k,l}
+# 	bspc node --move {-20 0,0 20,0 -20,20 0}
+
+#
+# mouse bindings
+#
+
+# Move or resize window
+super + shift + button1
+	if [ `bspc config pointer_action1` = "move" ]; then \
+	  bspc config pointer_action1 resize_corner; \
+	else \
+	  bspc config pointer_action1 move; \
+	fi
