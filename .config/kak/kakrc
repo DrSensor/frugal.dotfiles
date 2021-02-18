@@ -1,0 +1,121 @@
+# BUG(kakoune):
+# 1. on mouse scrolling up or page up not work in consequtive
+
+set-option global ui_options ncurses_assistant=none
+
+set-face global MenuForeground bright-black,yellow+b
+set-face global MenuBackground default,bright-black
+set-face global MenuInfo default,default+u
+set-face global Information default,black
+
+set-face global PrimarySelection default,default+br
+set-face global PrimaryCursor default,default+br
+set-face global PrimaryCursorEol default,yellow
+set-face global SecondarySelection default,default+r
+set-face global SecondaryCursor default,default+r
+set-face global SecondaryCursorEol default,bright-black
+set-face global MatchingChar default,default+ur
+
+# Left side
+set-face global LineNumbers bright-black
+set-face global LineNumbersWrapped bright-black,default+r
+set-face global WrapMarker yellow
+set-face global BufferPadding black # hide `~` char
+
+set-face global StatusLine yellow,default
+set-face global StatusCursor default,default+r
+set-face global StatusLineMode default,default+b
+set-face global StatusLineValue bright-black,default+b
+set-face global StatusLineInfo bright-black,default
+
+# add-highlighter global/ number-lines -relative -hlcursor -separator "| "
+add-highlighter global/ show-matching
+add-highlighter global/ wrap -word -indent -marker "␣"
+
+map global insert <c-s> '<esc>:w<ret>i'
+
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+plug "evanrelf/number-toggle.kak" config %{
+	set-option global number_toggle_params -hlcursor
+}
+plug "lePerdu/kakboard" %{
+	hook global WinCreate .* %{ kakboard-enable }
+}
+plug "KJ_Duncan/kakoune-kotlin.kak" domain "bitbucket.org" config %{
+	# OPTIONAL CONFIGURATION
+	hook global -once WinSetOption filetype=kotlin %{
+		define-command kotlin-section-line -docstring "seperate a section of code with (// --)" %{
+			try %{ execute-keys -draft "<esc>o//<space>-<esc>hy98p<esc>jo<esc>" }
+		}
+	}
+	hook global WinSetOption filetype=kotlin %{
+		set-option window lintcmd 'ktlint --relative --verbose --editorconfig=/YOUR-PATH-TO/.editorconfig'
+		alias window ksl kotlin-section-line
+		hook global -once -always WinSetOption filetype=.* %{
+			unset-option window lintcmd
+			unalias window ksl kotlin-section-line
+		}
+	}
+}
+
+
+## git-branch.kak by lenormf
+## Store the current git branch that contains the buffer
+# --------------------------------------------------------
+declare-option -docstring "name of the git branch holding the current buffer" str modeline_git_branch
+hook global WinCreate .* %{
+	hook window NormalIdle .* %{ evaluate-commands %sh{
+		branch=$(cd "$(dirname "${kak_buffile}")" && git rev-parse --abbrev-ref HEAD 2>/dev/null)
+		if [ -n "${branch}" ]; then
+			printf 'set window modeline_git_branch %%{%s}' "${branch}"
+		fi
+	} }
+	evaluate-commands %sh{
+		is_work_tree=$(cd "$(dirname "${kak_buffile}")" && git rev-parse --is-inside-work-tree 2>/dev/null)
+		if [ "${is_work_tree}" = 'true' ]; then
+			printf 'set-option window modelinefmt %%{%s}' " %opt{modeline_git_branch}  ${kak_opt_modelinefmt}"
+		fi
+	}
+}
+
+
+## kak-lsp
+## Enable language server and add additional feature on specific filetype=
+# ---------------------------------------------------------------------------
+evaluate-commands %sh{ kak-lsp --kakoune -s $kak_session }
+hook global WinSetOption filetype=.* %{
+	lsp-enable-window
+	lsp-auto-hover-enable
+}
+hook global WinSetOption filetype=rust %{
+	hook window -group rust-inlay-hints BufReload .* rust-analyzer-inlay-hints
+	hook window -group rust-inlay-hints NormalIdle .* rust-analyzer-inlay-hints
+	hook window -group rust-inlay-hints InsertIdle .* rust-analyzer-inlay-hints
+	hook -once -always window WinSetOption filetype=.* %{
+		remove-hooks window rust-inlay-hints
+	}
+}
+hook global WinSetOption filetype=zig %{
+    set-option buffer formatcmd 'zig fmt'
+    set-option window lsp_auto_highlight_references true
+    set-option global lsp_server_configuration zls.zig_lib_path="/usr/lib/zig"
+    set-option -add global lsp_server_configuration zls.warn_style=true
+    set-option -add global lsp_server_configuration zls.enable_semantic_tokens=true
+    hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
+    hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
+    hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
+    hook -once -always window WinSetOption filetype=.* %{
+        remove-hooks window semantic-tokens
+    }
+}
+hook global WinSetOption filetype=go %{
+	hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
+	hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
+	hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
+	hook -once -always window WinSetOption filetype=.* %{
+		remove-hooks window semantic-tokens
+	}
+}
+hook global WinSetOption filetype=(nim|javascript|typescript|python) %{
+	set-option buffer indentwidth 2
+}
