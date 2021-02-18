@@ -1,5 +1,6 @@
 #!/bin/sh
 export `grep -v '^#' ${0%/*}/.env | xargs -d '\n'`
+export MICRO_TRUECOLOR=1
 
 systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
@@ -32,7 +33,11 @@ bspc config pointer_action1  resize_corner
 
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a Chromium desktop='^2'
-bspc rule -a 'firefox:Toolkit' state=floating sticky=on  # Picture-in-Picture
+
+# Picture-in-Picture
+bspc rule -a 'firefox:Toolkit' state=floating sticky=on  
+# bspc rule -a '??' state=floating sticky=on	# BUG: Chrome Picutre-in-Picture mode doesn't have WM_CLASS
+
 bspc rule -a mplayer2 state=floating
 bspc rule -a Zathura state=tiled
 bspc rule -a Kupfer.py focus=on
