@@ -4,14 +4,11 @@ export `grep -v '^#' ${0%/*}/.env | xargs -d '\n'`
 systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
 
+systemctl start nix-daemon
+
 autorandr --change
 picom --daemon --experimental-backends	# standalone window compositor
-
-wallpaper=`ls ~/Pictures/wallpapers/* | shuf | tail -1`
-xwallpaper --center $wallpaper
-xautolock -nowlocker "${0%/*}/lockscreen $wallpaper" \
-          -locker "sh -c '${0%/*}/lockscreen $wallpaper && systemctl suspend'" \ # synchronize this behaviour with polybar powerbutton
-          -time 10 -notify 1 -detectsleep &
+wmname LG3D				# shamelessly fake wm name to make Java application works
 
 bspc monitor -d I II III IV V VI VII VIII IX X
 
@@ -19,24 +16,41 @@ bspc config border_width         2
 bspc config window_gap           6
 bspc config split_ratio          0.52
 
-bspc config click_to_focus        none
-bspc config focus_follows_pointer true
-bspc config automatic_scheme      longest_side
+bspc config click_to_focus          none
+bspc config focus_follows_pointer   true
+bspc config pointer_follows_focus   true
+bspc config pointer_follows_monitor true
 
+bspc config automatic_scheme      longest_side
 bspc config single_monocle        true
 bspc config borderless_monocle    true
 bspc config gapless_monocle       true
 
 bspc config pointer_modifier mod4
-bspc config pointer_action1 resize_corner
+bspc config pointer_action1  resize_corner
 #bspc config pointer_action2 move	# see mouse bindings in sxhkdrc
 
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a Chromium desktop='^2'
+bspc rule -a 'firefox:Toolkit' state=floating sticky=on  # Picture-in-Picture
 bspc rule -a mplayer2 state=floating
 bspc rule -a Zathura state=tiled
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 
-SXHKD_SHELL=sh sxhkd &
+# Any heavy graphic apps should be in fullscreen to avoid lag
+bspc rule -a Blender state=fullscreen
+bspc rule -a '*:Godot_Engine' state=floating center=on  # BUG: godot set WM_CLASS too late
+#bspc rule -a Godot state=fullscreen
+
+# TODO: replace with xset dpms
+# TODO: synchronize `-locker $command` behaviour with polybar powerbutton
+xautolock -time 10 -notify 1 -detectsleep \
+          -locker "systemctl suspend" \
+          -nowlocker "${0%/*}/lockscreen $DISPLAY" &
+
+redshift &
+xwallpaper --center `ls ~/Pictures/wallpapers/* | shuf | tail -1`
+env SXHKD_SHELL=sh sxhkd &
 polybar top --quiet &
+ibus-daemon -drx

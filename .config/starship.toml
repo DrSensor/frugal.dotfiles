@@ -1,7 +1,29 @@
 add_newline = false
 
-[character]
-use_symbol_for_status = true
+# TODO: wait for https://github.com/starship/starship/issues/528
+# default_suffix = ""
+# 
+# [directory]
+# style = "fg:black bg:#dda0dd"
+# truncate_to_repo = false
+# 
+# [git_branch]
+# style = "fg:black bg:yellow"
+# 
+# [git_status]
+# style = "fg:red bg:yellow"
+# 
+# [package]
+# style = "fg:black bg:#f0fff0"
+# 
+# [rust]
+# style = "fg:black bg:#ffa07a"
+# 
+# [cmd_duration]
+# style = "fg:white bg:#191970"
+#
+# [character]
+# use_symbol_for_status = true
 
 [battery]
 full_symbol = "🔋"
@@ -18,7 +40,8 @@ style = "bold yellow"
 
 [time]
 disabled = false
-format = "%-M:%S"
+format = '╚╡[$time]($style)'
+time_format = "%M:%S"
 
 [memory_usage]
 disabled = false

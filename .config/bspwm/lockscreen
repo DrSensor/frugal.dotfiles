@@ -1,15 +1,24 @@
 #!/bin/sh
-max() {
-  xrandr --current \
-  | grep '*' | uniq | awk '{print $1}' \
-  | cut -d 'x' `([ $1 = 'W' ] && echo '-f1') || ([ $1 = 'H' ] && echo '-f2')` \
-  | sort -n | tail -1
-}
 
-convert $1 -resize `max W`x`max H` rgb:- | \
-i3lock --raw `max W`x`max H`:rgb --image /dev/stdin \
-       --ignore-empty-password \
-       --show-failed-attempts \
-       --pointer default \
-       --tiling
-       # --color 565656
+## Multi-monitor wallpaper
+# max() {
+#   xrandr --current \
+#   | grep '*' | uniq | awk '{print $1}' \
+#   | cut -d 'x' `([ $1 = 'W' ] && echo '-f1') || ([ $1 = 'H' ] && echo '-f2')` \
+#   | sort -n | tail -1
+# }
+# convert $1 -resize `max W`x`max H` rgb:- | \
+# i3lock --raw `max W`x`max H`:rgb --image /dev/stdin \
+#        --ignore-empty-password \
+#        --show-failed-attempts \
+#        --pointer default \
+#        --tiling
+#        # --color 565656
+
+## Databender Screenshot
+maim -x $1 \
+| convert png:- bmp:- \
+| sox -r 48k -c 1 -e u-law -t raw /dev/stdin -t raw /dev/stdout trim 0 100s \
+: treble -30 1k \
+| convert bmp:- rgb:- \
+| i3lock --image /dev/stdin --raw 1920x1080:rgb

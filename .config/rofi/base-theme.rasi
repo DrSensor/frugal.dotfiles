@@ -13,10 +13,10 @@ listview {
 }
 
 prompt {
-    font: "hack 11";
+    font: "Noto Sans";
 }
 entry {
-    font: "hack 11";
+    font: "Noto Sans";
     background-color: #333;
     expand:	false;
     width:	10em;
@@ -24,7 +24,7 @@ entry {
 
 element {
     padding:	3px 7px;
-    font:	"sans-serif 11";
+    font:	"Noto Sans 11";
 }
 element selected {
     background-color: #66f6;

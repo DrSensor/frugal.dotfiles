@@ -1,10 +1,27 @@
 #
+# laptop independent hotkeys
+#
+
+XF86AudioMute
+	pactl set-sink-mute 0 toggle
+XF86Audio{Raise,Lower}Volume
+	pactl set-sink-volume 0 {+,-}5%
+
+XF86MonBrightness{Up,Down}
+	light -{A,U} 2
+
+XF86Sleep
+	xautolock -locknow
+
+#
 # wm independent hotkeys
 
 
 # terminal emulator
 super + Return
-	kitty -1 --instance-group `bspc query -D --desktop --names`
+	kitty --single-instance
+	#     --instance-group `bspc query -D --desktop --names` \
+	#     --override allow_remote_control=yes
 
 # terminal emulator
 super + @Home
