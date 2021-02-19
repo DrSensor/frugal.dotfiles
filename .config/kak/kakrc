@@ -70,9 +70,14 @@ hook global WinCreate .* %{
 ## Enable language server and add additional feature on specific filetype=
 # ---------------------------------------------------------------------------
 evaluate-commands %sh{ kak-lsp --kakoune -s $kak_session }
+map global user l %{: enter-user-mode lsp<ret>} -docstring "LSP mode"
 hook global WinSetOption filetype=.* %{
 	lsp-enable-window
 	lsp-auto-hover-enable
+	map window normal <F2> ':lsp-rename-prompt<ret>'
+	map window insert <F2> '<esc>:lsp-rename-prompt<ret>i'
+	map window normal <F3> ':lsp-formatting<ret>'
+	map window insert <F3> '<esc>:lsp-formatting<ret>i'
 }
 hook global WinSetOption filetype=rust %{
 	hook window -group rust-inlay-hints BufReload .* rust-analyzer-inlay-hints
