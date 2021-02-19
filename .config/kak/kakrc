@@ -32,14 +32,18 @@ set-face global StatusLineInfo bright-black,default
 add-highlighter global/ show-matching
 add-highlighter global/ wrap -word -indent -marker "␣"
 
-map global insert <c-s> '<esc>:w<ret>i'
+map global insert <c-s> '<esc>:write<ret>i'
+map global normal <F1> ':comment-line<ret>'
+map global insert <F1> '<esc>:comment-line<ret>i'
+map global normal <a-F1> ':comment-block<ret>'
+map global insert <a-F1> '<esc>:comment-block<ret>i'
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "robertmeta/plug.kak" noload config %{
 	#> configure plug.kak here <#
 }
 plug "evanrelf/number-toggle.kak" config %{
-	set-option global number_toggle_params -hlcursor
+	set-option global number_toggle_params -hlcursor -separator "| "
 }
 plug "lePerdu/kakboard" %{
 	hook global WinCreate .* %{ kakboard-enable }
