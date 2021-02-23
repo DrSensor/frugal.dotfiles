@@ -9,6 +9,11 @@ export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 
+export MICRO_TRUECOLOR=1 # enable true-color support for micro editor
+
+# https://github.com/NixOS/nix/issues/2033#issuecomment-744059453
+export NIX_PATH=$NIX_PATH:$HOME/.nix-defexpr/channels
+
 export RUSTC_WRAPPER=sccache
 export CARGO=`which cargo`
 

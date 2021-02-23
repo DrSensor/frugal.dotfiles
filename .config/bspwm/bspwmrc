@@ -1,11 +1,8 @@
 #!/bin/sh
 export `grep -v '^#' ${0%/*}/.env | xargs -d '\n'`
-export MICRO_TRUECOLOR=1
 
 systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
-
-systemctl start nix-daemon
 
 autorandr --change
 picom --daemon --experimental-backends	# standalone window compositor
