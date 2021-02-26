@@ -1,3 +1,6 @@
+# https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish#L20
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
 alias project-tree "exa --git-ignore --tree --all -I .git"
 alias docker-compose podman-compose
 
