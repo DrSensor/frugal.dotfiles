@@ -79,7 +79,8 @@ hook global WinSetOption filetype=.* %{
 	lsp-enable-window
 	lsp-auto-hover-enable
 	map window normal <F2> ':lsp-rename-prompt<ret>'
-	map window insert <F2> '<esc>:lsp-rename-prompt<ret>i'
+	# BUG: doesn't return back into insert mode
+	# map window insert <F2> '<esc>:lsp-rename-prompt<ret>i'
 	map window normal <F3> ':lsp-formatting<ret>'
 	map window insert <F3> '<esc>:lsp-formatting<ret>i'
 }
