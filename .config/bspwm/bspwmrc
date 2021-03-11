@@ -64,6 +64,7 @@ xautolock -time 10 -notify 1 -detectsleep \
           -nowlocker "${0%/*}/lockscreen $DISPLAY" &
 
 redshift &
+dunst &
 xwallpaper --center `ls ~/Pictures/wallpapers/* | shuf | tail -1`
 env SXHKD_SHELL=sh sxhkd &
 ibus-daemon -drx

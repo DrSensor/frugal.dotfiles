@@ -4,3 +4,12 @@ fish_variables
 .config/micro/backups/
 .config/obs-studio/**/*.bak
 !.local/*
+.weechat/logs/
+.weechat/script/
+.weechat/weechat.conf
+.weechat/sec.conf
+.weechat/alias.conf
+.weechat/irc.conf
+.weechat/relay.conf
+.weechat/trigger.conf
+.weechat/weechat.log
