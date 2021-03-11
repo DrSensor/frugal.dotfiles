@@ -1,5 +1,6 @@
 #!/bin/sh
 export `grep -v '^#' ${0%/*}/.env | xargs -d '\n'`
+projector=$(xrandr --query | grep 'DP-1')
 
 systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
@@ -8,9 +9,11 @@ autorandr --change
 picom --daemon --experimental-backends	# standalone window compositor
 wmname LG3D				# shamelessly fake wm name to make Java application works
 
-bspc monitor -d I II III IV V VI VII VIII IX X
-bspc monitor eDP-1 -n primary -d I II III IV V VI VII VIII IX
-bspc monitor DP-1 -n projector -d X
+bspc monitor -d 1 2 3 4 5 6 7 8 9 0
+if [[ $projector = *connected* ]]; then
+  bspc monitor eDP-1 -d 1 2 3 4 5 6 7
+  bspc monitor DP-1 -d 8 9 0
+fi
 
 bspc config border_width         2
 bspc config window_gap           6
@@ -29,7 +32,9 @@ bspc config gapless_monocle       true
 bspc config merge_overlapping_monitors true
 bspc config remove_disabled_monitors   true
 bspc config remove_unplugged_monitors  true
-bspc monitor primary -s projector
+if [[ $projector = *connected* ]]; then
+  bspc monitor eDP-1 -s DP-1
+fi
 
 bspc config pointer_modifier mod4
 bspc config pointer_action1  resize_corner
@@ -61,5 +66,9 @@ xautolock -time 10 -notify 1 -detectsleep \
 redshift &
 xwallpaper --center `ls ~/Pictures/wallpapers/* | shuf | tail -1`
 env SXHKD_SHELL=sh sxhkd &
-polybar top --quiet &
 ibus-daemon -drx
+
+polybar top --quiet &
+if [[ $projector = *connected* ]]; then
+    polybar bottom --quiet &
+fi

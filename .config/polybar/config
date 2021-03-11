@@ -28,7 +28,7 @@ secondary = #e60053
 alert = #bd2c40
 
 [bar/top]
-;monitor = ${env:MONITOR:eDP-1}
+monitor = ${env:MONITOR:eDP-1}
 width = 100%
 height = 20
 fixed-center = true
@@ -55,11 +55,11 @@ font-0 = Noto Sans:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 
-modules-left = bspwm backlight-acpi
+modules-left = xkeyboard bspwm backlight-acpi
 modules-center = xwindow
-modules-right = pulseaudio xkeyboard memory cpu wlan eth battery temperature date powermenu
+modules-right = pulseaudio  memory cpu wlan battery temperature date powermenu
 
-tray-position = right
+tray-position = left
 tray-padding = 2
 ;tray-background = #0063ff
 
@@ -73,6 +73,15 @@ wm-restack = bspwm
 
 cursor-click = pointer
 cursor-scroll = ns-resize
+
+[bar/bottom]
+inherit = bar/top
+bottom = true
+monitor = ${env:PROJECTOR:DP-1}
+;monitor-strict = true
+modules-left = xkeyboard bspwm pulseaudio
+modules-right = memory cpu eth usb
+tray-position =
 
 [module/xwindow]
 type = internal/xwindow
@@ -107,25 +116,22 @@ label-unmounted-foreground = ${colors.foreground-alt}
 [module/bspwm]
 type = internal/bspwm
 
-label-focused = %index%
+; pin-workspaces = false
+; inline-mode = true
+reverse-scroll = false
+
 label-focused-background = ${colors.background-alt}
 label-focused-underline= ${colors.primary}
-label-focused-padding = 2
-
-label-occupied = %index%
-label-occupied-padding = 2
-
-label-urgent = %index%!
 label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
-
-label-empty = %index%
 label-empty-foreground = ${colors.foreground-alt}
+
+label-focused-padding = 2
+label-occupied-padding = 2
+label-urgent-padding = 2
 label-empty-padding = 2
 
 ; Separator in between workspaces
 ; label-separator = |
-
 
 [module/mpd]
 type = internal/mpd
@@ -145,10 +151,13 @@ type = internal/xbacklight
 enable-scroll = true
 interval = 0.5
 
-format = <label> <bar>
-label = BL
+format = <ramp> <label> <bar>
+label = %percentage%%
 
-bar-width = 15
+;format = <label> <bar>
+;label = "%percentage%%"
+
+bar-width = 5
 bar-indicator = |
 bar-indicator-foreground = #fff
 bar-indicator-font = 2
@@ -158,6 +167,10 @@ bar-fill-foreground = #9f78e1
 bar-empty = ─
 bar-empty-font = 2
 bar-empty-foreground = ${colors.foreground-alt}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
 
 [module/backlight-acpi]
 inherit = module/xbacklight
@@ -211,12 +224,19 @@ format-connected-underline = #55aa55
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
-
 format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/usb]
+type = internal/network
+interface = enp0s20f0u2
+interval = 3.0
+unknown-as-up = true
+
+format-connected-underline = #97ab85
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+format-disconnected =
 
 [module/date]
 type = internal/date
@@ -237,13 +257,28 @@ label = %time%%date%
 [module/pulseaudio]
 type = internal/pulseaudio
 interval = 1
+click-right = pavucontrol
 
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
+;format-volume = <ramp-volume> <bar-volume>
+format-volume = <ramp-volume><label-volume> <bar-volume>
+label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
 
-label-muted = 🔇 muted
+label-muted = 
 label-muted-foreground = #666
+
+; <ramp-volume>
+;ramp-volume-0 =
+;ramp-volume-1 = 
+;ramp-volume-2 = 
+;ramp-volume-3 = 
+; <label-volume>
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-3 = 
+ramp-volume-4 = 
+ramp-volume-5 = 
 
 bar-volume-width = 5
 bar-volume-foreground-0 = #55aa55

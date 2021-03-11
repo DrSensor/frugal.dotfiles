@@ -2,3 +2,4 @@ fish_variables
 .config/kak/plugins/
 .config/micro/buffers/
 .config/micro/backups/
+.config/obs-studio/**/*.bak
