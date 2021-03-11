@@ -3,3 +3,4 @@ fish_variables
 .config/micro/buffers/
 .config/micro/backups/
 .config/obs-studio/**/*.bak
+!.local/*

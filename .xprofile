@@ -1,5 +1,9 @@
 # https://nouveau.freedesktop.org/Optimus.html
 export DRI_PRIME=1
+# https://wiki.archlinux.org/index.php/Hardware_video_acceleration
+# export VDPAU_DRIVER=nvidia # (GM108) 940MX not supported
+export VDPAU_DRIVER=va_gl
+export LIBVA_DRIVER_NAME=iHD
 
 # https://github.com/kovidgoyal/kitty/issues/469#issuecomment-419406438
 export GLFW_IM_MODULE=ibus

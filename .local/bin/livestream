@@ -1,0 +1,110 @@
+#!/bin/sh
+
+# https://dennismungai.wordpress.com/2018/02/06/streaming-your-linux-desktop-to-youtube-and-twitch-via-nvidias-nvenc-and-vaapi/
+
+stream_key=`pass $1/stream_key`
+
+## Outputs
+ffmpeg_livestream="
+-f flv 'rtmp://sin.contribute.live-video.net/app/$stream_key?$2'
+"
+
+#! pactl list sources short
+mic='alsa_input.pci-0000_00_1f.3.analog-stereo'
+desktop='alsa_output.pci-0000_00_1f.3.analog-stereo.monitor'
+
+## Inputs
+# TODO: replace x11grab with kmsgrab
+ffmpeg_video="
+-f x11grab -s 1920x1080 -r 30 -probesize 42M -i :0.0
+"
+# TODO: only pass $desktop to VOD track 1 (livestream only)
+# FIXME: replace `-f pulse -i $desktop` with ambient.mp4
+# hint: check OBS source code
+ffmpeg_audio="
+-f pulse -i $desktop
+-f pulse -i $mic
+"
+
+## Combine all inputs
+ffmpeg_amux="
+[2]highpass=f=200,lowpass=f=3000[hl];
+[1][hl]amix=inputs=2[a]
+"
+ffmpeg_mux="
+-filter_complex '$ffmpeg_amux'
+-map 0:v -map [a] -f flv -ac 2
+"
+
+## Codec settings
+# see(keyword=speed): https://sites.google.com/site/linuxencoding/x264-ffmpeg-mapping
+#! ffmpeg -h encoder=h264_vaapi -hide_banner
+ffmpeg_vaapi="-vaapi_device /dev/dri/renderD129
+-vf format=nv12,hwupload
+-vcodec h264_vaapi
+-compression_level 1
+-coder 0
+-aud true
+-threads `nproc`
+"
+ffmpeg_vaapi_cbr="$ffmpeg_vaapi -rc_mode:v CBR
+-b:v 2M -minrate 2M -maxrate 2M
+-strict normal -bufsize 4M
+"
+ffmpeg_vaapi_cqp="$ffmpeg_vaapi -rc_mode:v CQP
+-qp 30 -qdiff 4
+-bf 4 -b_strategy 2 -sc_threshold 40
+-subq 0
+"
+ffmpeg_vaapi_icq="$ffmpeg_vaapi -rc_mode:v ICQ
+-global_quality 28
+-subq 0
+-cmp sad
+-b_strategy 0
+"
+ffmpeg_vcodec="$ffmpeg_vaapi_icq
+-g 40 -keyint_min 20
+-aspect 16:9
+"
+#! ffmpeg -h encoder=h264_qsv -hide_banner
+## BUG: Quicksync doesn't work with x11grab/kmsgrab
+# ffmpeg_qsv="
+# -vf 'hwupload=extra_hw_frames=64,vpp_qsv=framerate=30,scale_qsv=w=1280:h=720:format=qsv'
+# -c:v h264_qsv
+# -cavlc
+# "
+# ffmpeg_qsv_cqp="$ffmpeg_qsv
+# -q:v 25 -qscale:v 30
+# "
+# ffmpeg_qsv_la_icq="$ffmpeg_qsv
+# -look_ahead 1 -look_ahead_depth 40
+# -q:v 25
+# "
+ffmpeg_acodec="
+-acodec aac -b:a 64k
+-ar 44100 -async 44100
+"
+
+## Run streamer
+ffmpeg_run="ffmpeg
+$ffmpeg_video $ffmpeg_audio
+$ffmpeg_mux
+$ffmpeg_vcodec $ffmpeg_acodec
+$ffmpeg_livestream
+"
+
+hide_stream_key() {
+  sed --unbuffered \
+  --line-length=80 --separate \
+  "s/$stream_key/live_***/g"
+}
+
+## TODO: select between  ffmpeg or gstreamer
+run=$ffmpeg_run
+
+## dry-run
+echo $run | hide_stream_key
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+
+## run
+eval $run -loglevel warning |& hide_stream_key
