@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 # https://dennismungai.wordpress.com/2018/02/06/streaming-your-linux-desktop-to-youtube-and-twitch-via-nvidias-nvenc-and-vaapi/
 
 service=`[ "$1" = "--dry-run"  ] && echo $2 || echo $1`
@@ -14,6 +13,8 @@ monitor_offset=`echo $monitor | sed "s/$monitor_resolution+//" | tr '+' ','`
 #! pactl list sources short
 mic='alsa_input.pci-0000_00_1f.3.analog-stereo'
 desktop='alsa_output.pci-0000_00_1f.3.analog-stereo.monitor'
+music='music.monitor' #! route-audio music
+ambient='~/Music/Ambient/Campfire_sound_ambience.ogg'
 
 ## Outputs
 ffmpeg_livestream="
@@ -25,12 +26,11 @@ ffmpeg_livestream="
 ffmpeg_video="
 -f x11grab -s $monitor_resolution -r 30 -probesize 42M -i :0.0+$monitor_offset
 "
-# TODO: only pass $desktop to VOD track 1 (livestream only)
-# FIXME: replace `-f pulse -i $desktop` with ambient.mp4
+# TODO: only pass $music to VOD track 1 (avoid DCMA)
+# `-f pulse -i $music`
 # hint: check OBS source code
 ffmpeg_audio="
--f pulse -i $desktop
--f pulse -i $mic
+-stream_loop -1 -i $ambient
 "
 
 ## Combine all inputs
@@ -38,10 +38,11 @@ ffmpeg_amux="
 [2]highpass=f=200,lowpass=f=3000[hl];
 [1][hl]amix=inputs=2[a]
 "
-ffmpeg_mux="
--filter_complex '$ffmpeg_amux'
--map 0:v -map [a] -f flv -ac 2
-"
+# ffmpeg_mux="
+# -filter_complex '$ffmpeg_amux'
+# -map 0:v -map [a] -f flv -ac 2
+# "
+ffmpeg_mux=""
 
 ## Codec settings
 # see(keyword=speed): https://sites.google.com/site/linuxencoding/x264-ffmpeg-mapping
@@ -100,21 +101,18 @@ $ffmpeg_vcodec $ffmpeg_acodec
 $ffmpeg_livestream
 "
 
-hide_stream_key() {
-  sed --binary --unbuffered \
-  --line-length=1 --separate \
-  "s/$stream_key/live_***/g"
-}
+hide_stream_key() { sed "s/$stream_key/live_***/g"; }
+separator() { printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' $1; }
 
 ## TODO: select between  ffmpeg or gstreamer
 run=$ffmpeg_run
 
 ## dry-run
 echo $run | hide_stream_key
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 
 ## run
 if [ "$1" != '--dry-run' ]; then
+  separator '-'
   if [ "$service" = 'twitch.tv' ] && [ "$2" = 'bandwidthtest=true' ]; then
     eval $run
   else
