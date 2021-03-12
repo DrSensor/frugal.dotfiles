@@ -2,11 +2,13 @@
 
 # https://dennismungai.wordpress.com/2018/02/06/streaming-your-linux-desktop-to-youtube-and-twitch-via-nvidias-nvenc-and-vaapi/
 
-stream_key=`pass $1/stream_key`
+service=`[ "$1" = "--dry-run"  ] && echo $2 || echo $1`
+params=`[ "$1" = "--dry-run"  ] && echo $3 || echo $2`
+stream_key=`pass $service/stream_key`
 
 ## Outputs
 ffmpeg_livestream="
--f flv 'rtmp://sin.contribute.live-video.net/app/$stream_key?$2'
+-f flv 'rtmp://sin.contribute.live-video.net/app/$stream_key?$params'
 "
 
 #! pactl list sources short
@@ -94,8 +96,8 @@ $ffmpeg_livestream
 "
 
 hide_stream_key() {
-  sed --unbuffered \
-  --line-length=80 --separate \
+  sed --binary --unbuffered \
+  --line-length=1 --separate \
   "s/$stream_key/live_***/g"
 }
 
@@ -107,4 +109,10 @@ echo $run | hide_stream_key
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 
 ## run
-eval $run -loglevel warning |& hide_stream_key
+if [ "$1" != '--dry-run' ]; then
+  if [ "$service" = 'twitch.tv' ] && [ "$2" = 'bandwidthtest=true' ]; then
+    eval $run
+  else
+    eval $run -loglevel warning |& hide_stream_key
+  fi
+fi
