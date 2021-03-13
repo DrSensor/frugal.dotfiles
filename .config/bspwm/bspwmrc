@@ -1,6 +1,6 @@
 #!/bin/sh
 export `grep -v '^#' ${0%/*}/.env | xargs -d '\n'`
-projector=$(xrandr --query | grep 'DP-1')
+projector=$(xrandr --query | grep '^DP-1 connected')
 
 systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
