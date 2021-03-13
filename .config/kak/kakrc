@@ -17,7 +17,7 @@ set-face global SecondaryCursorEol default,bright-black
 set-face global MatchingChar default,default+ur
 
 # Left side
-set-face global LineNumbers bright-black
+set-face global LineNumbers rgb:9e9e9e
 set-face global LineNumbersWrapped bright-black,default+r
 set-face global WrapMarker yellow
 set-face global BufferPadding black # hide `~` char
@@ -47,6 +47,22 @@ plug "evanrelf/number-toggle.kak" config %{
 }
 plug "lePerdu/kakboard" %{
 	hook global WinCreate .* %{ kakboard-enable }
+}
+plug "andreyorst/fzf.kak" config %{
+	map -docstring 'fzf mode' global normal '<c-p>' ': fzf-mode<ret>'
+} defer "fzf" %{
+	set-option global fzf_preview_width '65%'
+	set-option global fzf_project_use_tilda true
+	set-option global fzf_terminal_command 'kitty-terminal kak -c %val{session} -e "%arg{@}"'
+	evaluate-commands %sh{
+		if [ -n "$(command -v fd)" ]; then
+			echo "set-option global fzf_file_command %{fd .  --no-ignore --type f --follow --hidden --exclude .git --exclude .svn}"
+		else
+			echo "set-option global fzf_file_command %{find .  \( -path '*/.svn*' -o -path '*/.git*' \) -prune -o -type f -follow -print}"
+		fi
+		[ -n "$(command -v bat)" ] && echo "set-option global fzf_highlight_command bat"
+		[ -n "${kak_opt_grepcmd}" ] && echo "set-option global fzf_sk_grep_command %{${kak_opt_grepcmd}}"
+	}
 }
 
 
