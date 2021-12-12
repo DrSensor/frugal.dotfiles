@@ -43,8 +43,8 @@ tag_disabled = false
 disabled = false
 
 [git_state]
-format = '\( [$state($progress_current/$progress_total)]($style)\)'
-style = 'fg:blue dimmed'
+format = '\([$state($progress_current/$progress_total)]($style)\)'
+style = 'fg:bright-cyan dimmed bold'
 rebase = 'REBASING'
 merge = 'MERGING'
 revert = 'REVERTING'

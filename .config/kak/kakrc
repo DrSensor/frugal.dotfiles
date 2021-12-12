@@ -23,16 +23,13 @@ set-face global LineNumbersWrapped bright-black,default+r
 set-face global WrapMarker yellow
 set-face global BufferPadding black # hide `~` char
 
-# TODO: remove this Status* when kakship become more faster
 # set-face global StatusLineInfo bright-black,default
 # set-face global StatusLineValue bright-black,default+b
-
 set-face global StatusLine yellow,default
 set-face global StatusCursor default,default+r
 set-face global StatusLineMode default,default+b
 
-# INFO: already handled by "evanrelf/number-toggle.kak"
-# add-highlighter global/ number-lines -relative -hlcursor -separator "| "
+# add-highlighter global/ number-lines -relative -hlcursor -separator "| "
 add-highlighter global/ show-matching
 add-highlighter global/ wrap -word -indent -marker "␣"
 
@@ -78,7 +75,6 @@ plug "andreyorst/fzf.kak" config %{
 		[ -n "${kak_opt_grepcmd}" ] && echo "set-option global fzf_sk_grep_command %{${kak_opt_grepcmd}}"
 	}
 }
-# WARNING: a tad bit slow on scrolling 😞
 plug "eburghar/kakship" do %{
 	cargo install --force --path . --root ~/.local
 	[ ! -e $kak_config/starship.toml ] && cp starship.toml $kak_config/
