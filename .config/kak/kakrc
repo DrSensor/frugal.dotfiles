@@ -1,7 +1,8 @@
 # BUG(kakoune):
 # 1. on mouse scrolling up or page up not work in consequtive
 
-set-option global ui_options ncurses_assistant=none
+set-option global ui_options terminal_assistant=none
+set-option global tabstop 4
 
 set-face global MenuForeground bright-black,yellow+b
 set-face global MenuBackground default,bright-black
@@ -22,13 +23,16 @@ set-face global LineNumbersWrapped bright-black,default+r
 set-face global WrapMarker yellow
 set-face global BufferPadding black # hide `~` char
 
+# TODO: remove this Status* when kakship become more faster
+# set-face global StatusLineInfo bright-black,default
+# set-face global StatusLineValue bright-black,default+b
+
 set-face global StatusLine yellow,default
 set-face global StatusCursor default,default+r
 set-face global StatusLineMode default,default+b
-set-face global StatusLineValue bright-black,default+b
-set-face global StatusLineInfo bright-black,default
 
-# add-highlighter global/ number-lines -relative -hlcursor -separator "| "
+# INFO: already handled by "evanrelf/number-toggle.kak"
+# add-highlighter global/ number-lines -relative -hlcursor -separator "| "
 add-highlighter global/ show-matching
 add-highlighter global/ wrap -word -indent -marker "␣"
 
@@ -37,13 +41,23 @@ map global normal <F1> ':comment-line<ret>'
 map global insert <F1> '<esc>:comment-line<ret>i'
 map global normal <a-F1> ':comment-block<ret>'
 map global insert <a-F1> '<esc>:comment-block<ret>i'
+map global normal <c-d> ':select-or-add-cursor<ret>'
+
+define-command -hidden select-or-add-cursor %{
+    try %{
+        execute-keys "<a-k>\A.\z<ret>"
+        execute-keys -save-regs '' "_<a-i>w*"
+    } catch %{
+        execute-keys -save-regs '' "_*<s-n>"
+    } catch nop
+}
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "robertmeta/plug.kak" noload config %{
 	#> configure plug.kak here <#
 }
 plug "evanrelf/number-toggle.kak" config %{
-	set-option global number_toggle_params -hlcursor -separator "| "
+	set-option global number_toggle_params -hlcursor -separator "┆"
 }
 plug "lePerdu/kakboard" %{
 	hook global WinCreate .* %{ kakboard-enable }
@@ -64,7 +78,13 @@ plug "andreyorst/fzf.kak" config %{
 		[ -n "${kak_opt_grepcmd}" ] && echo "set-option global fzf_sk_grep_command %{${kak_opt_grepcmd}}"
 	}
 }
-
+# WARNING: a tad bit slow on scrolling 😞
+plug "eburghar/kakship" do %{
+	cargo install --force --path . --root ~/.local
+	[ ! -e $kak_config/starship.toml ] && cp starship.toml $kak_config/
+} config %{
+	kakship-enable
+}
 
 ## git-branch.kak by lenormf
 ## Store the current git branch that contains the buffer
@@ -131,4 +151,7 @@ hook global WinSetOption filetype=go %{
 }
 hook global WinSetOption filetype=(nim|javascript|typescript|python) %{
 	set-option buffer indentwidth 2
+}
+hook global BufCreate .+\.(importmap|webmanifest) %{
+    set-option buffer filetype json
 }
