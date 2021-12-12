@@ -54,7 +54,7 @@ plug "robertmeta/plug.kak" noload config %{
 	#> configure plug.kak here <#
 }
 plug "evanrelf/number-toggle.kak" config %{
-	set-option global number_toggle_params -hlcursor -separator "┆"
+	set-option global number_toggle_params -hlcursor -separator "┊ "
 }
 plug "lePerdu/kakboard" %{
 	hook global WinCreate .* %{ kakboard-enable }
