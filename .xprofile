@@ -13,6 +13,7 @@ export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 
+# export PATH=$HOME/.dprint/bin:$PATH
 export MICRO_TRUECOLOR=1 # enable true-color support for micro editor
 
 # https://github.com/NixOS/nix/issues/2033#issuecomment-744059453
@@ -21,7 +22,15 @@ export NIX_PATH=$NIX_PATH:$HOME/.nix-defexpr/channels
 export RUSTC_WRAPPER=sccache
 export CARGO=`which cargo`
 
-export PATH=~/.nimble/bin:$PATH
+export XDG_CACHE_HOME=$HOME/.cache
+export PATH=$HOME/.nimble/bin:$PATH
+export PATH=`go env GOPATH`/bin:$PATH
+
+# include all binary of all packages in package-manager installed via asdf into PATH
+export PATH=`echo $HOME/.asdf/installs/*/*/bin | sed 's/ /:/g'`:$PATH
+
+# use podman for docker-compose
+export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
 
 # https://www.rockyourcode.com/how-to-get-flutter-and-android-working-on-arch-linux/
 #export JAVA_HOME=/usr/lib/jvm/java-14-openjdk
