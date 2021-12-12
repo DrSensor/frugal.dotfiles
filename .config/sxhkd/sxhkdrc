@@ -145,7 +145,7 @@ super + ctrl + shift + {Left,Right}
 
 # [KDE] focus the next/previous monitor
 super + ctrl + {Down,Up}
-	bspc monitor --focus {prev,next}.local
+	bspc monitor --focus {prev,next}
 
 # [KDE] send node to the next/previous monitor
 super + ctrl + shift + {Down,Up}

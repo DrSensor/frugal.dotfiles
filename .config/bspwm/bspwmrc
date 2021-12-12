@@ -11,8 +11,10 @@ wmname LG3D				# shamelessly fake wm name to make Java application works
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 0
 if [[ $projector = *connected* ]]; then
+  xrandr --output DP-1 --above eDP-1
   bspc monitor eDP-1 -d 1 2 3 4 5 6 7
   bspc monitor DP-1 -d 8 9 0
+  # bspc monitor eDP-1 -s DP-1
 fi
 
 bspc config border_width         2
@@ -32,9 +34,8 @@ bspc config gapless_monocle       true
 bspc config merge_overlapping_monitors true
 bspc config remove_disabled_monitors   true
 bspc config remove_unplugged_monitors  true
-if [[ $projector = *connected* ]]; then
-  bspc monitor eDP-1 -s DP-1
-fi
+# if [[ $projector = *connected* ]]; then
+# fi
 
 bspc config pointer_modifier mod4
 bspc config pointer_action1  resize_corner
@@ -69,7 +70,7 @@ xwallpaper --center `ls ~/Pictures/wallpapers/* | shuf | tail -1`
 env SXHKD_SHELL=sh sxhkd &
 ibus-daemon -drx
 
-polybar top --quiet &
+prime-run polybar top --quiet &
 if [[ $projector = *connected* ]]; then
-    polybar bottom --quiet &
+    prime-run polybar bottom --quiet &
 fi
