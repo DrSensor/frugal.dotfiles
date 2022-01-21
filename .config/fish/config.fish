@@ -2,16 +2,24 @@
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 alias project-tree "exa --git-ignore --tree --all -I .git"
-alias docker-compose podman-compose
+alias task dstask
 
 starship init fish | source
 zoxide init fish | source
 /home/linuxbrew/.linuxbrew/bin/brew shellenv | source
 
+if status is-interactive
+  atuin init fish | source
+  ## after that do `atuin import fish` manually in your terminal prompt
+end
+
 for dir in /opt/asdf-vm ~/.asdf
   test -d $dir && source $dir/asdf.fish && break
 end
 
+function get-twitch_token
+  twitch token -u -s "chat:edit chat:read" &| grep -oP 'User Access Token: \K[a-z0-9]+'
+end
 
 ## TODO: please replace this with lua 😂
 

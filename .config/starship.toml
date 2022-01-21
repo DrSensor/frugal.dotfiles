@@ -46,4 +46,3 @@ time_format = "%M:%S"
 [memory_usage]
 disabled = false
 threshold = 25
-show_swap = false
