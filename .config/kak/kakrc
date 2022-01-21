@@ -38,7 +38,7 @@ map global normal <F1> ':comment-line<ret>'
 map global insert <F1> '<esc>:comment-line<ret>i'
 map global normal <a-F1> ':comment-block<ret>'
 map global insert <a-F1> '<esc>:comment-block<ret>i'
-map global normal <c-d> ':select-or-add-cursor<ret>'
+map global normal <a-q> ':select-or-add-cursor<ret>'
 
 define-command -hidden select-or-add-cursor %{
     try %{
