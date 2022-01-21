@@ -1,11 +1,58 @@
 {
+  allowUnfree = true;
   # https://nixos.org/manual/nixpkgs/stable/#sec-declarative-package-management
   packageOverrides = pkgs: with pkgs; {
+    # TODO: move this to extras.nix
+    inherit (pkgs) stdenv lib;
+    # TODO: urho3d - https://urho3d.github.io/documentation/1.7.1/_building.html
+    Arrow = stdenv.mkDerivation rec {
+      pname = "Arrow";
+      version = "1.0.0";
+      src = fetchTarball "https://github.com/mhgolkar/Arrow/releases/download/v${version}/Arrow-v${version}-linux-x86_64.tar.gz";
+      # TODO: properly install Arrow (Game Narrative Design Tool)
+      # hint: see pkgs.godot
+      installPhase = "
+        install -m755 -D Arrow.x86_64 $out/bin/${pname}
+      ";
+      meta = with lib; {
+        description = "Game Narrative Design Tool";
+        license = lib.licenses.mit;
+        platforms = [ "x86-linux" "x86_64-linux" ];
+      };
+    };
+    # TODO: Effekseer - https://github.com/effekseer/Effekseer/blob/master/.github/workflows/build.yml#L130-L133
+    # Effekseer = stdenv.mkDerivation rec {};
+    # TODO: LDtk - https://github.com/deepnight/ldtk/releases/latest
+    # TODO: ogmo - https://github.com/Ogmo-Editor-3/OgmoEditor3-CE
+    # LDtk = stdenv.mkDerivation rec {}
+    # TODO: SpriteSheetPacker - https://github.com/amakaseev/sprite-sheet-packer
+    # TODO: bitmapflow - https://github.com/Bauxitedev/bitmapflow/blob/main/.github/workflows/rust.yml
+    # TODO: fontbuilder - https://github.com/andryblack/fontbuilder
+    # TODO: fontbm - https://github.com/vladimirgamalyan/fontbm
+    # TODO: msdf-atlas-gen - https://github.com/Chlumsky/msdf-atlas-gen
+    # TODO: msdfgen - https://github.com/Chlumsky/msdfgen
+    # TODO: labelme - https://github.com/wkentaro/labelme  (useful for rotoscoping)
+
+    # TODO: athens.AppImage - https://github.com/athensresearch/athens/releases/latest
+    # TODO: nxcloud - https://github.com/budde25/nxcloud
+    # TODO: create_ap - https://github.com/lakinduakash/linux-wifi-hotspot#command-line-help-and-documentation
+    # TODO: outrun - https://github.com/Overv/outrun
+    # TODO: SysMonTask - https://github.com/KrispyCamel4u/SysMonTask
+    # TODO: pipe-rename - https://github.com/marcusbuffett/pipe-rename
+
+    ### Overlay ###
+    # TODO: taskopen - fetchGit { url = "https://github.com/jschlatow/taskopen.git"; ref = "nim"; }
+    ############################################################
+
     myWorkflow = buildEnv {
       name = "workflow-utils";
       paths = [
-        taskwarrior # todo manager
-        taskwarrior-tui
+        dstask
+        # taskwarrior # todo manager
+        # taskwarrior-tui # alternative: vit
+        # timewarrior
+        # taskopen
+        # athens menex nxcloud
       ];
     };
 
@@ -19,7 +66,10 @@
           # modal editor
           kak
           kak-lsp
+          vis
+          # vis-lspc
         ];
+        # version-control = [ dolt dvc ];
         git-toolkit = [
           # {c,t}ui for git
           # gitin
@@ -49,13 +99,19 @@
         ];
         essential = [
           watchexec # watch change then run command
+          reptyr # reparent process to new terminal
           editorconfig-checker # universal linter
           rs-git-fsmonitor # git config core.fsmonitor rs-git-fsmonitor
         ];
+        # emulation = [ ryujinx pcsx2 wine darling-dmg anbox ];
         language = [
           # nix
           rnix-lsp
           nixpkgs-fmt
+        ];
+        multi-device = [
+            scrcpy
+            # mconnect/gconnect # KDEConnect replacement
         ];
       in
         editor ++ essential
@@ -83,7 +139,7 @@
       paths = [ rust go zig nim ]
       ++ [ xmake sccache binutils lld ]
         # ++ [ ld valgrind-light perf-tools bcal hexyl elfutils elfinfo ] # inspect
-        # ++ [ hotspot elf-dissector rehex massif-visualizer ] # GUI for inspect
+        # ++ [ hotspot elf-dissector rehex massif-visualizer vite ] # GUI for inspect
       ;
     };
 
@@ -112,19 +168,19 @@
         game-engine = [
           love
           godot
+          pico8
           # babylonjs-editor
+          # urho3d
+          # haxe    # for using HaxeFlixel
         ];
         shader-material = [
           shadered # shader IDE
-          # material-maker
+          # effekseer
         ];
-        pixel-art = [
-          # pixelorama
-          # aseprite-unfree # pixel-art editor
-          xprite-editor # pixel-art editor
-          pikopixel # pixel-art editor
-          rx # pixel editor
+        level-editor = [
           tiled # tile map editor
+          # LDtk
+          # ogmo
         ];
         math = [
           zegrapher # plot equation
@@ -144,6 +200,15 @@
       ;
     };
 
+    asset-utils = buildEnv {
+      name = "asset-utils";
+      paths = let
+        image-utils = [ vips exiv2 gmic imagemagick ];
+        font-utils = [ msdfgen msdf-atlas-gen fontbm ];
+      in
+        [ image-utils ];
+    };
+
     myArt = buildEnv {
       name = "art-toolkit";
       paths = let
@@ -157,6 +222,10 @@
         _3d-character = [
           # dust3d
         ];
+        _3d-material = [
+          # material-maker
+          # armorpaint
+        ];
         _3d = []
         ++ [ blender ]
         ++ _3d-model
@@ -166,10 +235,16 @@
         _2d-animation = [
           opentoonz
           synfigstudio
+          # enve
         ];
         _2d-drawing = [
           # krita
           inkscape
+          # pixelorama
+          # aseprite-unfree # pixel-art editor
+          xprite-editor # pixel-art editor
+          pikopixel # pixel-art editor
+          rx # pixel editor
         ];
         _2d = []
         ++ _2d-drawing
@@ -178,6 +253,7 @@
 
         misc = [
           gimp # image editor
+          # bitmapflow # generate inbetween animated sprites
           # opencolorio # color management framework
         ];
       in
@@ -190,33 +266,41 @@
     myStream = buildEnv {
       name = "youtuber-toolkit";
       paths = let
-        chat = let
-          #TODO: use packageOverride like in nix python pills
-          weechatWithScripts = with weechatScripts;
-            [
-              # cosmetics
+        chat = [
+          weechat
+          (
+            with weechatScripts; [
+              ## cosmetics
               colorize_nicks
               weechat-autosort
               weechat-notify-send
-
-              #platform
+              ## platform
               # weechat-twitch
-            ] ++ [ weechat ];
-        in
-          [ weechatWithScripts irssi ];
+            ]
+          )
+        ];
         record = [
-          # screen recorder
+          # linuxPackages.v4l2loopback # should be in /etc/nixos/configuration.nix
+          ## Screen Recorder
           # obs-browser # https://github.com/obsproject/obs-browser/issues/219#issuecomment-773240464
           # obs-text-pango # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=obs-text-pango#n27
+          # obs-rtspserver # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=obs-rtspserver-bin#n15
           # obs-input-overlay # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=obs-input-overlay-bin#n20
+          # obs-streamlink # only availble on Windows 😞
+          #? choose *only* one of these:
+          # obs-shaderfilter # written in C (with a lot of shader presets)
+          # obs-shaderfilter-plus # written in Rust (allow both HLSL & GLSL)
+          # obs-streamfx # written in C++ (only HLSL)
           obs-gstreamer
           obs-v4l2sink
           simplescreenrecorder # support OpenGL recording
-          # terminal recorder
+          ## Terminal Recorder
           asciinema
           # termtosvg
         ];
-        download = [ youtube-dl tartube ];
+        audio = [ noisetorch pulseeffects-pw ];
+        utils = [ xournalpp pavucontrol chat ];
+        download = [ youtube-dl tartube streamlink ];
         edit = [
           # lossless-cut # cut,split,trim video
           audacity # audio editor
@@ -227,8 +311,9 @@
           # talkfilters # English text to humoruous text
         ];
       in
-        record ++ edit
+        record ++ utils
         ++ download
+        # ++ edit
       ;
     };
   };
