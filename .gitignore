@@ -1,8 +1,14 @@
 fish_variables
+.config/fish/functions/br.fish
 .config/kak/plugins/
+.config/tmux/plugins/*/
 .config/micro/buffers/
 .config/micro/backups/
 .config/obs-studio/**/*.bak
+!.config/tmux/plugins/tmux-thumbs/
+!.config/tmux/plugins/gitmux/
+!.config/tmux/plugins/smug/
+.config/tmux/plugins/*/target/release
 !.local/*
 .weechat/logs/
 .weechat/script/

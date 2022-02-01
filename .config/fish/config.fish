@@ -1,3 +1,7 @@
+if [ $TERM = "xterm-256color" ] || [ $TERM = "linux" ]
+  exec tmux
+end
+
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish#L20
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
