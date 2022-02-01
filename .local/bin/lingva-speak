@@ -1,0 +1,24 @@
+#!/usr/bin/env deno
+const { args } = Deno, ctx = new AudioContext()
+
+await speak(args[0])
+
+async function speak(text) {
+  const audio = await fetch(`https://lingva.ml/api/v1/audio/en/${text}`)
+                .then(response => response.json())
+                .then(({ audio }) => new Uint8Array(audio))
+                .then(({ buffer }) => ctx.decodeAudioData(buffer))
+
+  // const { audio: array } = await response.json(),
+  //       u8array = new Uint8Array(array),
+  //       audio = await ctx.decodeAudioData(u8array.buffer)
+
+  const play = (offset = 0) => {
+    let src = ctx.createBufferSource()
+    src.buffer = audio
+    src.connect(ctx.destination)
+    src.play(offset)
+  }
+
+  play()
+}
