@@ -4,14 +4,14 @@
 set-option global ui_options terminal_assistant=none
 set-option global tabstop 4
 
-set-face global MenuForeground bright-black,yellow+b
-set-face global MenuBackground default,bright-black
+set-face global MenuForeground rgb:cecefe,default+bi
+set-face global MenuBackground rgb:cecefe,default+i
 set-face global MenuInfo default,default+u
-set-face global Information default,black
+set-face global Information default,default+b
 
 set-face global PrimarySelection default,default+br
 set-face global PrimaryCursor default,default+br
-set-face global PrimaryCursorEol default,yellow
+set-face global PrimaryCursorEol default,bright-black
 set-face global SecondarySelection default,default+r
 set-face global SecondaryCursor default,default+r
 set-face global SecondaryCursorEol default,bright-black
@@ -23,11 +23,11 @@ set-face global LineNumbersWrapped bright-black,default+r
 set-face global WrapMarker yellow
 set-face global BufferPadding black # hide `~` char
 
-# set-face global StatusLineInfo bright-black,default
 # set-face global StatusLineValue bright-black,default+b
-set-face global StatusLine yellow,default
-set-face global StatusCursor default,default+r
-set-face global StatusLineMode default,default+b
+set-face global StatusLine default,default
+set-face global StatusCursor bright-black,default+r
+set-face global StatusLineMode cyan,default+rb
+set-face global StatusLineInfo cyan,default+r
 
 # add-highlighter global/ number-lines -relative -hlcursor -separator "| "
 add-highlighter global/ show-matching

@@ -2,7 +2,6 @@ add_newline = false
 format = """\
 ${custom.kakcursor}\
 ${custom.kakposition}\
-${custom.kakmode}\
 ${custom.kakcontext}\
 $directory\
 ${custom.kakfile}\
@@ -14,33 +13,36 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_status\
+${custom.kakmode}\
 ${custom.kaksession}\
 $memory_usage\
+$battery\
+$time\
 ${custom.kaktime}"""
 
 [time]
 format = "[]($style)[  $time ]($style)"
 style = "fg:black bg:bright-green"
 time_format = "%H:%M"
-disabled = false
+disabled = true
 
 [git_branch]
-format = '[$branch]($style)'
+format = '[](fg:purple)[$branch]($style)'
 style = 'fg:bright-green bold'
 truncation_length = 9223372036854775807
 truncation_symbol = '…'
 only_attached = false
 always_show_remote = true
-disabled = false
+disabled = true
 
 [git_commit]
-format = '[ $hash$tag]($style)'
+format = '[$hash$tag]($style)'
 style = 'fg:bright-green dimmed'
 commit_hash_length = 7
 only_detached = false
 tag_symbol = ' 笠'
 tag_disabled = false
-disabled = false
+disabled = true
 
 [git_state]
 format = '\([$state($progress_current/$progress_total)]($style)\)'
@@ -52,10 +54,10 @@ cherry_pick = 'CHERRY-PICKING'
 bisect = 'BISECTING'
 am = 'AM'
 am_or_rebase = 'AM/REBASE'
-disabled = false
+disabled = true
 
 [git_status]
-format = '[]($style)[$all_status $ahead_behind]($style inverted)[]($style)'
+format = '[]($style)[$all_status $ahead_behind]($style inverted)'
 style = 'bg:black fg:red italic bold'
 stashed = '\$'
 ahead = '⇡${count}'
@@ -67,7 +69,7 @@ renamed = '»'
 modified = '!'
 staged = '+'
 untracked = '?'
-disabled = false
+disabled = true
 
 [directory]
 format = '[]($style)[$read_only]($read_only_style)[$path]($style inverted)'
@@ -83,14 +85,14 @@ disabled = false
 
 [directory.substitutions]
 "~/.config" = " "
-"~/.workspace/rust" = ""
-"~/.workspace/docker" = " "
-"~/.workspace/alpine" = " "
-"~/.workspace/arch" = " "
-"~/.workspace/kustomize" = "ﴱ "
-"~/.workspace/node" = ""
-"~/.workspace" = " "
-"~/scm" = " "
+"~/Videos" = " "
+"~/Projects/OSS" = " "
+"~/Projects/Examples" = " "
+"~/Projects/Orchestration" = " "
+"~/Projects/Freelance" = " "
+"~/Projects/Personal" = "ﴱ "
+"~/Projects/Others" = " "
+"~/Projects" = " "
 "~" = " "
 
 [package]
@@ -103,7 +105,7 @@ disabled = false
 format = "[ $symbol$percentage]($style) "
 charging_symbol = ' '
 discharging_symbol = ' '
-disabled = false
+disabled = true
 
 [[battery.display]]
 threshold = 10
@@ -173,7 +175,7 @@ disabled = true
 
 [custom.kakfile]
 description = 'The current Kakoune buffername'
-format = '[/$output]($style inverted)[]($style)'
+format = '[/$output]($style inverted)'
 style = 'bold bg:black fg:purple'
 command = 'echo -n ${kak_buffile##*/}'
 when = 'true'
@@ -198,7 +200,8 @@ disabled = false
 
 [custom.kakmode]
 description = 'The current Kakoune mode'
-format = ' {{mode_info}}'
+format = '{{mode_info}}[]($style)'
+style = 'fg:cyan'
 when = ''
 shell = ['true']
 disabled = false
