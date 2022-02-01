@@ -3,7 +3,7 @@ if [ $TERM = "xterm-256color" ] || [ $TERM = "linux" ]
 end
 
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish#L20
-set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+set -x MANPAGER "sh -c 'col -b | bat -l man -p'"
 
 alias project-tree "exa --git-ignore --tree --all -I .git"
 alias task dstask
@@ -24,8 +24,6 @@ end
 function get-twitch_token
   twitch token -u -s "chat:edit chat:read" &| grep -oP 'User Access Token: \K[a-z0-9]+'
 end
-
-## TODO: please replace this with lua 😂
 
 function route-audio
   echo "create+mix virtual output $argv[1] with system output"
