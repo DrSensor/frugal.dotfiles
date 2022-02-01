@@ -19,9 +19,7 @@ XF86Sleep
 
 # terminal emulator
 super + Return
-	kitty --single-instance
-	#     --instance-group `bspc query -D --desktop --names` \
-	#     --override allow_remote_control=yes
+	alacritty msg create-window || alacritty
 
 # terminal emulator
 super + @Home
