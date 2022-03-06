@@ -1,0 +1,8 @@
+theme = "bogster"
+
+[lsp]
+display-messages = true
+
+[editor]
+line-number = "relative"
+auto-pairs  = true
