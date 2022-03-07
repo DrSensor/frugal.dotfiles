@@ -7,11 +7,13 @@ set -x MANPAGER "sh -c 'col -b | bat -l man -p'"
 
 alias project-tree "exa --git-ignore --tree --all -I .git"
 alias task dstask
+alias snippet the-way
 alias open "handlr open" # also please manually install `xdg-utils-handlr` which automatically replace😞`xdg-utils` then shim `xdg-open`
 
 starship init fish | source
 zoxide init fish | source
 mcfly init fish | source
+the-way complete fish | source
 /home/linuxbrew/.linuxbrew/bin/brew shellenv | source
 
 # rebind mcfly auto suggestion, https://github.com/cantino/mcfly/issues/198https://github.com/cantino/mcfly/issues/198 
@@ -20,6 +22,14 @@ bind -eM insert \cr
 bind \er __mcfly-history-widget
 if bind -M insert >/dev/null 2>&1
   bind -M insert \er __mcfly-history-widget
+end
+
+function cmdsave -d "save previous command as snippet"
+  set line (echo $history[1])
+  the-way cmd $line
+end
+function cmdsearch -d "search commands saved as snippet"
+  commandline (the-way search --languages=sh --stdout)
 end
 
 function mv--swap -d "Swap (rename) between 2 files"
