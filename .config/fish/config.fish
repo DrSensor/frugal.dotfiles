@@ -12,7 +12,7 @@ starship init fish | source
 zoxide init fish | source
 /home/linuxbrew/.linuxbrew/bin/brew shellenv | source
 
-function swapf -d "Swap (rename) between 2 files"
+function mv--swap -d "Swap (rename) between 2 files"
   # TODO: this should be rewritten as cli via syscall renameat2(2) but with parallize batch swapping
   # example: https://gist.github.com/eatnumber1/f97ac7dad7b1f5a9721f#file-renameat2-c-L96
   mv $argv[1]    "$argv[1];"
@@ -32,9 +32,9 @@ if status is-interactive
     end
   end
   function _atuin_fuzzy_search
-    mv-swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+    mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
     _atuin_search
-    mv-swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+    mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
   end
   ## keycode found via `xxd -psd`
   bind \e\[1\;2A _atuin_search        # Shift+Up
