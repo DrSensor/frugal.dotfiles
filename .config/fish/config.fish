@@ -1,4 +1,4 @@
-if [ $TERM = "xterm-256color" ] || [ $TERM = "linux" ]
+if [ "$TERM_PROGRAM" != "vscode" ] && [ $TERM = "xterm-256color" ] || [ $TERM = "linux" ]
   exec tmux
 end
 
