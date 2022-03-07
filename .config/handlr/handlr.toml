@@ -1,0 +1,2 @@
+enable_selector = true
+selector = "rofi -dmenu -theme ~/.config/rofi/window.rasi -p 'Open With: '"
