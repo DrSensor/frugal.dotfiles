@@ -10,7 +10,16 @@ alias task dstask
 
 starship init fish | source
 zoxide init fish | source
+mcfly init fish | source
 /home/linuxbrew/.linuxbrew/bin/brew shellenv | source
+
+# rebind mcfly auto suggestion, https://github.com/cantino/mcfly/issues/198https://github.com/cantino/mcfly/issues/198 
+bind -e \cr
+bind -eM insert \cr
+bind \er __mcfly-history-widget
+if bind -M insert >/dev/null 2>&1
+  bind -M insert \er __mcfly-history-widget
+end
 
 function mv--swap -d "Swap (rename) between 2 files"
   # TODO: this should be rewritten as cli via syscall renameat2(2) but with parallize batch swapping
