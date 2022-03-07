@@ -17,7 +17,7 @@ async function speak(text) {
     let src = ctx.createBufferSource()
     src.buffer = audio
     src.connect(ctx.destination)
-    src.play(offset)
+    src.start(offset)
   }
 
   play()
