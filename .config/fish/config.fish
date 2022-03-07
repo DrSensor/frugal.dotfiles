@@ -12,9 +12,34 @@ starship init fish | source
 zoxide init fish | source
 /home/linuxbrew/.linuxbrew/bin/brew shellenv | source
 
+function swapf -d "Swap (rename) between 2 files"
+  # TODO: this should be rewritten as cli via syscall renameat2(2) but with parallize batch swapping
+  # example: https://gist.github.com/eatnumber1/f97ac7dad7b1f5a9721f#file-renameat2-c-L96
+  mv $argv[1]    "$argv[1];"
+  mv $argv[2]    $argv[1]
+  mv "$argv[1];" $argv[2]
+  # NEWS: seems like it's coming as `mv --swap` https://lists.gnu.org/archive/html/coreutils/2021-05/msg00030.html
+end
+
 if status is-interactive
-  atuin init fish | source
-  ## after that do `atuin import fish` manually in your terminal prompt
+  ## do `atuin import fish` manually in your terminal prompt
+  atuin init fish | ATUIN_NOBIND=true source
+  function _atuin_fzf
+    set h (atuin search --cmd-only (commandline -b) | fzf)
+    commandline -f repaint
+    if test -n "$h"
+      commandline -r $h
+    end
+  end
+  function _atuin_fuzzy_search
+    mv-swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+    _atuin_search
+    mv-swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+  end
+  ## keycode found via `xxd -psd`
+  bind \e\[1\;2A _atuin_search        # Shift+Up
+  bind \e\[1\;6A _atuin_fuzzy_search  # Ctrl+Shift+Up
+  bind \e\[1\;4A _atuin_fzf           # Alt+Shift+Up
 end
 
 for dir in /opt/asdf-vm ~/.asdf
