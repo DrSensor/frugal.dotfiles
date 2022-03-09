@@ -18,8 +18,8 @@ style = "#3a3a3a"
 min_time = 1000
 
 [directory]
-format = "[$path]($style)[([$read_only](bg:$read_only_style bold red))]($read_only_style)"
-style = "bold cyan"
+format = "[[$path](bg:$style bold cyan)]($style)[([$read_only](bg:$read_only_style bold red))]($read_only_style)"
+style = "#3a3a3a"
 read_only = "⨯ read"
 read_only_style = "#3a3a3a"
 
@@ -119,7 +119,7 @@ charging_symbol = ""
 discharging_symbol = ""
 unknown_symbol = ""
 empty_symbol = ""
-format = "[$symbol$percentage]($style bg:#3a3a3a)[⁓](bg:#3a3a3a)"
+format = "[](#3a3a3a)[$symbol$percentage]($style bg:#3a3a3a)[╞](bg:#3a3a3a)"
 
 [[battery.display]]
 threshold = 20
@@ -135,13 +135,13 @@ style = "bold green"
 
 [time]
 disabled = false
-format = '[╚╡[$time](bold yellow bg:$style)](bg:$style)'
+format = '╩[╡[$time](underline bold yellow bg:$style)](bg:$style)'
 time_format = "%M:%S"
 style = "#3a3a3a"
 
 [memory_usage]
 disabled = false
-threshold = 25
+threshold = 45
 format = "[[$symbol${ram}( \\\\| ${swap})](bold 247 bg:$style)]($style)"
 symbol = "🐏"
 style = "#3a3a3a"
