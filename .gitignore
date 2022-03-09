@@ -1,5 +1,7 @@
 fish_variables
-.config/fish/functions/br.fish
+.config/fish/functions/
+.config/fish/completions/
+.config/fish/conf.d/
 .config/kak/plugins/
 .config/tmux/plugins/*/
 .config/micro/buffers/
