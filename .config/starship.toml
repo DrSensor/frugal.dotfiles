@@ -3,9 +3,9 @@
 command_timeout = 9999
 
 [character]
-success_symbol = "[┃](bold green bg:#3a3a3a)[](#3a3a3a)"
+success_symbol = "[┃](bold 250 bg:#3a3a3a)[](#3a3a3a)"
+vicmd_symbol = "[](bold bg:#3a3a3a)[](#3a3a3a)"
 error_symbol = "[](bold red bg:#3a3a3a)[](#3a3a3a)"
-vicmd_symbol = "[](blue bg:#3a3a3a)[](#3a3a3a)"
 format = "$symbol"
 
 # [template]

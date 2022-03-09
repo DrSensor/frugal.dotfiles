@@ -23,6 +23,9 @@ bind \er __mcfly-history-widget
 if bind -M insert >/dev/null 2>&1
   bind -M insert \er __mcfly-history-widget
 end
+function fish_user_key_bindings
+  fish_vi_key_bindings insert
+end
 
 function cmdsave -d "save previous command as snippet"
   set line (echo $history[1])
