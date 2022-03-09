@@ -1,48 +1,147 @@
-add_newline = false
+# Minimal starship config
 
-# TODO: wait for https://github.com/starship/starship/issues/528
-# default_suffix = ""
-# 
-# [directory]
-# style = "fg:black bg:#dda0dd"
-# truncate_to_repo = false
-# 
-# [git_branch]
-# style = "fg:black bg:yellow"
-# 
-# [git_status]
-# style = "fg:red bg:yellow"
-# 
-# [package]
-# style = "fg:black bg:#f0fff0"
-# 
-# [rust]
-# style = "fg:black bg:#ffa07a"
-# 
-# [cmd_duration]
-# style = "fg:white bg:#191970"
-#
-# [character]
-# use_symbol_for_status = true
+command_timeout = 9999
+
+[character]
+success_symbol = "[┃](bold green bg:#3a3a3a)[](#3a3a3a)"
+error_symbol = "[](bold red bg:#3a3a3a)[](#3a3a3a)"
+vicmd_symbol = "[](blue bg:#3a3a3a)[](#3a3a3a)"
+format = "$symbol"
+
+# [template]
+# format = "[[...](... bg:$style)]($style)"
+# style = "#3a3a3a"
+
+[cmd_duration]
+format = "[[◯ $duration](bg:$style bold yellow)]($style)"
+style = "#3a3a3a"
+min_time = 1000
+
+[directory]
+format = "[$path]($style)[([$read_only](bg:$read_only_style bold red))]($read_only_style)"
+style = "bold cyan"
+read_only = "⨯ read"
+read_only_style = "#3a3a3a"
+
+[nodejs]
+format = "[[$symbol$version](bg:$style bold #64de64)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[deno]
+format = "[[$symbol$version](bg:$style bold white)]($style)"
+style = "#3a3a3a"
+detect_extensions = ["jsx", "tsx"]
+symbol = "🦕"
+
+[dart]
+format = "[[$symbol$version](bg:$style bold #0468d7)]($style)"
+style = "#3a3a3a"
+symbol = "🎯"
+
+[kotlin]
+format = "[[$symbol$version](bg:$style bold #7f52ff)]($style)"
+style = "#3a3a3a"
+symbol = "🅺"
+
+[python]
+format = "[[$symbol$version](bg:$style bold #ffd343)]($style)"
+style = "#3a3a3a"
+symbol = "🐍"
+
+[lua]
+format = "[[$symbol$version](bg:$style bold #030380)]($style)"
+style = "#3a3a3a"
+symbol = "🌙"
+
+[golang]
+format = "[[$symbol$version](bg:$style bold #79d4fd)]($style)"
+style = "#3a3a3a"
+symbol = "🐹"
+
+[nim]
+format = "[[$symbol$version](bg:$style bold #ffe953)]($style)"
+style = "#3a3a3a"
+symbol = "👑"
+
+[rust]
+format = "[[$symbol$version](bg:$style bold #ffc832)]($style)"
+style = "#3a3a3a"
+symbol = "🦀"
+
+[zig]
+format = "[[$symbol$version](bg:$style bold #f7a41d)]($style)"
+style = "#3a3a3a"
+symbol = "⚡"
+
+[nix_shell]
+format = "[[$symbol$version](bg:$style bold #7ebae4)]($style)"
+style = "#3a3a3a"
+symbol = "❄️"
+
+[package]
+format = "[[$symbol$version](bg:$style bold 208)]($style)"
+style = "#3a3a3a"
+symbol = "📦"
+
+[docker_context]
+format = "[[$symbol$version](bg:$style bold #309cef)]($style)"
+style = "#3a3a3a"
+symbol = "🐳"
+
+[pulumi]
+format = "[[$symbol$version](bg:$style bold #805ac3)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[git_branch]
+format = "[[$symbol $branch](bg:$style bold #f14e32)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[git_status]
+format = "[([](#f14e32 bg:$style)$all_status$ahead_behind)]($style)"
+style = "#3a3a3a"
+conflicted = "[≈$count](bold red bg:#3a3a3a)"
+untracked = "[*$count](bold yellow bg:#3a3a3a)"
+modified = "[*$count](bold cyan bg:#3a3a3a)"
+stashed = "[≡$count](bold cyan bg:#3a3a3a)"
+staged = "[●$count](bold green bg:#3a3a3a)"
+renamed = "[»$count](bold yellow bg:#3a3a3a)"
+deleted = "[⨯$count](bold red bg:#3a3a3a)"
+ahead = "[⇡$count](bold green bg:#3a3a3a)"
+diverged = "[⇡$ahead_count](bold green bg:#3a3a3a)[⇣$behind_count](bold red bg:#3a3a3a)"
+behind = "[⇣$count](bold red bg:#3a3a3a)"
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
+unknown_symbol = ""
+empty_symbol = ""
+format = "[$symbol$percentage]($style bg:#3a3a3a)[⁓](bg:#3a3a3a)"
 
 [[battery.display]]
-threshold = 10
+threshold = 20
 style = "bold red"
 
 [[battery.display]]
-threshold = 30
+threshold = 50
 style = "bold yellow"
+
+[[battery.display]]
+threshold = 90
+style = "bold green"
 
 [time]
 disabled = false
-format = '╚╡[$time]($style)'
+format = '[╚╡[$time](bold yellow bg:$style)](bg:$style)'
 time_format = "%M:%S"
+style = "#3a3a3a"
 
 [memory_usage]
 disabled = false
 threshold = 25
+format = "[[$symbol${ram}( \\\\| ${swap})](bold 247 bg:$style)]($style)"
+symbol = "🐏"
+style = "#3a3a3a"
