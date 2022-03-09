@@ -1,2 +1,2 @@
 enable_selector = true
-selector = "rofi -dmenu -theme ~/.config/rofi/window.rasi -p 'Open With: '"
+selector = "sh -c 'sed -E \"s/.*/\\0\\x0icon\\x1f\\l\\0/\" | rofi -dmenu -show-icons -theme ~/.config/rofi/window.rasi -p \"Open With: \"'"
