@@ -36,6 +36,9 @@ end
 function cmdsearch -d "search commands saved as snippet"
   commandline (snippet search --languages=sh --stdout)
 end
+function cmdsync -d "sync commands saved as snippet into GitHub Gist"
+  THE_WAY_GITHUB_TOKEN=(pass gist.github.com/token) snippet sync
+end
 
 function mv--swap -d "Swap (rename) between 2 files"
   # TODO: this should be rewritten as cli via syscall renameat2(2) but with parallize batch swapping
