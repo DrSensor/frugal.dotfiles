@@ -19,12 +19,14 @@ the-way complete fish | source
 # rebind mcfly auto suggestion, https://github.com/cantino/mcfly/issues/198https://github.com/cantino/mcfly/issues/198 
 bind -e \cr
 bind -eM insert \cr
-bind \er __mcfly-history-widget
-if bind -M insert >/dev/null 2>&1
-  bind -M insert \er __mcfly-history-widget
-end
+bind \er __mcfly-history-widget  # Alt+r
 function fish_user_key_bindings
   fish_vi_key_bindings insert
+  bind -M insert \er __mcfly-history-widget     # Alt+r
+  ## keycode found via `xxd -psd`
+  bind -M insert \e\[1\;2A _atuin_search        # Shift+Up
+  bind -M insert \e\[1\;6A _atuin_fuzzy_search  # Ctrl+Shift+Up
+  bind -M insert \e\[1\;4A _atuin_fzf           # Alt+Shift+Up
 end
 
 function cmdsave -d "save previous command as snippet"
