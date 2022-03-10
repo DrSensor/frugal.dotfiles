@@ -31,10 +31,10 @@ end
 
 function cmdsave -d "save previous command as snippet"
   set line (echo $history[1])
-  the-way cmd $line
+  snippet cmd $line
 end
 function cmdsearch -d "search commands saved as snippet"
-  commandline (the-way search --languages=sh --stdout)
+  commandline (snippet search --languages=sh --stdout)
 end
 
 function mv--swap -d "Swap (rename) between 2 files"
