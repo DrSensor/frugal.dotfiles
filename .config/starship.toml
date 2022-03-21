@@ -1,6 +1,20 @@
-# Minimal starship config
+command_timeout = 0
+add_newline = false
+# TODO: refactor to right_format mode
+# format = """$time$cmd_duration$character"""
+# right_format = """$all"""
+# continuation_prompt = "▶▶" # WARNING: fish shell doesn't support this
+# TODO: use $fill in format and right_format https://starship.rs/config/#fill
+# [fill]
+# symbol = ""
+# style = "#3a3a3a"
 
-command_timeout = 9999
+# [line_break] # if right_prompt enabled
+# disabled = true
+
+# [template]
+# format = "[[...](... bg:$style)]($style)"
+# style = "#3a3a3a"
 
 [character]
 success_symbol = "[┃](bold 250 bg:#3a3a3a)[](#3a3a3a)"
@@ -8,20 +22,191 @@ vicmd_symbol = "[](bold bg:#3a3a3a)[](#3a3a3a)"
 error_symbol = "[](bold red bg:#3a3a3a)[](#3a3a3a)"
 format = "$symbol"
 
-# [template]
-# format = "[[...](... bg:$style)]($style)"
-# style = "#3a3a3a"
+[shell]
+format = "[[$indicator](bg:$style bold cyan)]($style)"
+style = "#3a3a3a"
+bash_indicator = "$̲"
+fish_indicator = "⟪̲"
+powershell_indicator = ">̲"
+zsh_indicator = "Z̲"
+ion_indicator = "̲"
+elvish_indicator = "ᑫ̲"
+tcsh_indicator = "t̲"
+xonsh_indicator = "Ƨ̲"
+cmd_indicator = "̲"
+nu_indicator = "n̲"
+unknown_indicator = "?̲"
+
+[status]
+format = "[[$symbol$status](bg:$style bold red)]($style)"
+style = "#3a3a3a"
+
+[sudo]
+format = "[[$symbol](bg:$style bold red)]($style)"
+style = "#3a3a3a"
 
 [cmd_duration]
 format = "[[◯ $duration](bg:$style bold yellow)]($style)"
 style = "#3a3a3a"
-min_time = 1000
+# min_time = 1000
+
+[jobs]
+format = "[[$symbol$number](bg:$style bold blue)]($style)"
+style = "#3a3a3a"
+symbol = "✦"
 
 [directory]
 format = "[[$path](bg:$style bold cyan)]($style)[([$read_only](bg:$read_only_style bold red))]($read_only_style)"
 style = "#3a3a3a"
 read_only = "⨯ read"
 read_only_style = "#3a3a3a"
+
+####################################################################
+
+[aws]
+format = "[[$symbol\\[$duration\\]$profile($region)](bg:$style bold #e76108)]($style)"
+style = "#3a3a3a"
+symbol = "☁️"
+expiration_symbol = "X"
+
+[azure]
+format = "[[$symbol $subscription](bg:$style bold #39cbf3)]($style)"
+style = "#3a3a3a"
+symbol = "⛺"
+
+[gcloud]
+format = "[[$symbol $account@$domain($region)](bg:$style bold #1a73e8)]($style)"
+style = "#3a3a3a"
+symbol = "⬣"
+
+[openstack]
+format = "[[$symbol $cloud($project)](bg:$style bold #da1a32)]($style)"
+style = "#3a3a3a"
+symbol = "⌑"
+
+[singularity]
+format = "[[$symbol\\[$env\\]](bg:$style bold #0369a1)]($style)"
+style = "#3a3a3a"
+symbol = "Ⓢ "
+
+#######
+
+[conda]
+format = "[[$symbol$environment](bg:$style bold #43b02a)]($style)"
+style = "#3a3a3a"
+symbol = "🅒"
+
+[cmake]
+format = "[[$symbol$version](bg:$style bold #064f8d)]($style)"
+style = "#3a3a3a"
+symbol = "△"
+
+[cobol]
+format = "[[$symbol$version](bg:$style bold #85acf7)]($style)"
+style = "#3a3a3a"
+symbol = "⚙️"
+
+[crystal]
+format = "[[$symbol$version](bg:$style bold white)]($style)"
+style = "#3a3a3a"
+symbol = "🔮"
+
+[dotnet]
+format = "[[$symbol$version($tfm)](bg:$style bold #512bd4)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[elixir]
+format = "[[$symbol$version(OTP:$otp_version)](bg:$style bold #4e2a8e)]($style)"
+style = "#3a3a3a"
+symbol = "💧"
+
+[elm]
+format = "[[$symbol$version](bg:$style bold #1293d8)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[erlang]
+format = "[[$symbol$version](bg:$style bold #a90533)]($style)"
+style = "#3a3a3a"
+symbol = ""
+
+[helm]
+format = "[[$symbol$version](bg:$style bold #091c84)]($style)"
+style = "#3a3a3a"
+symbol = "⎈"
+
+[java]
+format = "[[$symbol$version](bg:$style bold #f89917)]($style)"
+style = "#3a3a3a"
+symbol = "☕"
+
+[julia]
+format = "[[$symbol$version](bg:$style bold #4fb43a)]($style)"
+style = "#3a3a3a"
+symbol = "ஃ"
+
+[ocaml]
+format = "[[$symbol$version ($switch_indicator$switch_name)](bg:$style bold #f48a32)]($style)"
+style = "#3a3a3a"
+symbol = "🐪"
+
+[perl]
+format = "[[$symbol$version](bg:$style bold #0073a1)]($style)"
+style = "#3a3a3a"
+symbol = "🧄"
+
+[php]
+format = "[[$symbol$version](bg:$style bold #4F5B93)]($style)"
+style = "#3a3a3a"
+symbol = "🐘"
+
+[purescript]
+format = "[[$symbol$version](bg:$style bold white)]($style)"
+style = "#3a3a3a"
+symbol = "⋛"
+
+[rlang]
+format = "[[$symbol$version](bg:$style bold #3864ba)]($style)"
+style = "#3a3a3a"
+symbol = "📐"
+
+[red]
+format = "[[$symbol$version](bg:$style bold red)]($style)"
+style = "#3a3a3a"
+symbol = "🔺"
+
+[ruby]
+format = "[[$symbol$version](bg:$style bold #cc342d)]($style)"
+style = "#3a3a3a"
+symbol = "💎"
+
+[scala]
+format = "[[$symbol$version](bg:$style bold #dc322f)]($style)"
+style = "#3a3a3a"
+symbol = "≊"
+
+[swift]
+format = "[[$symbol$version](bg:$style bold #f05138)]($style)"
+style = "#3a3a3a"
+symbol = "🦅"
+
+[vlang]
+format = "[[$symbol$version](bg:$style bold #4a607e)]($style)"
+style = "#3a3a3a"
+symbol = "V"
+
+[vagrant]
+format = "[[$symbol$version](bg:$style bold #2e71e5)]($style)"
+style = "#3a3a3a"
+symbol = "⍱"
+
+[vcsh]
+format = "[[$symbol $repo](bg:$style bold yellow)]($style)"
+style = "#3a3a3a"
+symbol = "~"
+
+################################################################
 
 [nodejs]
 format = "[[$symbol$version](bg:$style bold #64de64)]($style)"
@@ -45,7 +230,7 @@ style = "#3a3a3a"
 symbol = "🅺"
 
 [python]
-format = "[[$symbol$version](bg:$style bold #ffd343)]($style)"
+format = "[[$symbol($pyenv_prefix)$version( $venv)](bg:$style bold #ffd343)]($style)"
 style = "#3a3a3a"
 symbol = "🐍"
 
@@ -75,9 +260,14 @@ style = "#3a3a3a"
 symbol = "⚡"
 
 [nix_shell]
-format = "[[$symbol$version](bg:$style bold #7ebae4)]($style)"
+format = "[[$symbol$state $name](bg:$style bold #7ebae4)]($style)"
 style = "#3a3a3a"
 symbol = "❄️"
+
+[container]
+format = "[[$symbol$name](bg:$style bold red dimmed)]($style)"
+style = "#3a3a3a"
+symbol = "⬢"
 
 [package]
 format = "[[$symbol$version](bg:$style bold 208)]($style)"
@@ -85,14 +275,29 @@ style = "#3a3a3a"
 symbol = "📦"
 
 [docker_context]
-format = "[[$symbol$version](bg:$style bold #309cef)]($style)"
+format = "[[$symbol$context](bg:$style bold #309cef)]($style)"
 style = "#3a3a3a"
 symbol = "🐳"
 
+[kubernetes]
+format = "[[$symbol ($user(@$cluster) )$context(\\($namespace\\))](bg:$style bold #3371e3)]($style)"
+style = "#3a3a3a"
+symbol = "☸"
+
+[terraform]
+format = "[[$symbol$version $workspace](bg:$style bold #844fba)]($style)"
+style = "#3a3a3a"
+symbol = "💠"
+
 [pulumi]
-format = "[[$symbol$version](bg:$style bold #805ac3)]($style)"
+format = "[[$symbol$version $username\\($stack\\)](bg:$style bold #805ac3)]($style)"
 style = "#3a3a3a"
 symbol = ""
+
+[hg_branch]
+format = "[[$symbol $branch](bg:$style bold #999)]($style)"
+style = "#3a3a3a"
+symbol = ""
 
 [git_branch]
 format = "[[$symbol $branch](bg:$style bold #f14e32)]($style)"
@@ -119,7 +324,7 @@ charging_symbol = ""
 discharging_symbol = ""
 unknown_symbol = ""
 empty_symbol = ""
-format = "[](#3a3a3a)[$symbol$percentage]($style bg:#3a3a3a)[╞](bg:#3a3a3a)"
+format = "[](#3a3a3a)[╚╡](bg:#3a3a3a)[$symbol$percentage]($style bg:#3a3a3a)[╞](bg:#3a3a3a)"
 
 [[battery.display]]
 threshold = 20
@@ -133,9 +338,14 @@ style = "bold yellow"
 threshold = 90
 style = "bold green"
 
+[shlvl]
+format = "[[$symbol$shlvl](bg:$style bold yellow)]($style)"
+style = "#3a3a3a"
+symbol = "↕️"
+
 [time]
 disabled = false
-format = '╩[╡[$time](underline bold yellow bg:$style)](bg:$style)'
+format = '[╡[$time](underline bold yellow bg:$style)](bg:$style)'
 time_format = "%M:%S"
 style = "#3a3a3a"
 
@@ -145,3 +355,21 @@ threshold = 45
 format = "[[$symbol${ram}( \\\\| ${swap})](bold 247 bg:$style)]($style)"
 symbol = "🐏"
 style = "#3a3a3a"
+
+# TODO: use ssh login format
+
+[username]
+format = "[[$user]($style bg:#3a3a3a)](#3a3a3a)"
+show_always = false
+style_user = "bold yellow"
+style_root = "bold red"
+
+[hostname]
+format = "[[$hostname](bg:$style bold dimmed green)]($style)"
+style = "#3a3a3a"
+ssh_only = true
+
+[localip]
+format = "[[$localipv4](bg:$style bold yellow)]($style)"
+style = "#3a3a3a"
+ssh_only = true
