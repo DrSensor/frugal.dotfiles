@@ -78,14 +78,23 @@ font:
     family: "Fira Code"
     style: Retina
 
+  # If below family is not specified, it will fall back to the
+  # value specified for the normal font.
+
   # The bold font face
   bold:
-    family: "Fira Code"
+    family: "Martian Mono"
+    style: "Bold"
 
   # The italic font face
   italic:
-    family: "Fira Code"
-    style: "Medium Italic"
+    family: "Cascadia Code"
+    style: "SemiBold Italic"
+    
+  # Bold italic font face
+  bold_italic:
+    family: "Cascadia Code"
+    style: "Bold Italic"
 
   # Point size of the font
   size: 7.0
