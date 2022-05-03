@@ -350,17 +350,18 @@ bell:
 #   - ~AppKeypad
 #   - AppKeypad
 #
-key_bindings: ############################# TMUX shorthand ######################################
-  - { key: D,        mods: Control|Shift, chars: "\x00s" } # view all sessions and windows      #
-  - { key: V,        mods: Alt,           chars: "\x00[" } # enter COPY mode                    #
-  - { key: F,        mods: Alt|Shift,     chars: "\x00F" } # motion-search (via tmux-thumbs)    #
-  - { key: W,        mods: Control,       chars: "\x00&" } # close tab (kill)                   #
-  - { key: T,        mods: Control,       chars: "\x00c" } # new tab                            #
-  - { key: RBracket, mods: Alt,           chars: "\x00n" } # select next tab                    #
-  - { key: LBracket, mods: Alt,           chars: "\x00p" } # select previous tab                #
-  - { key: RBracket, mods: Control,       chars: "\x00o" } # select next pane                   #
-  - { key: LBracket, mods: Control,       chars: "\x00;" } # select last (previously used) pane #
-#################################################################################################
+key_bindings: ############################# TMUX shorthand #######################################
+  - { key: D,          mods: Control|Shift, chars: "\x00s" } # view all sessions and windows      #
+  - { key: V,          mods: Alt,           chars: "\x00[" } # enter COPY mode                    #
+  - { key: F,          mods: Alt|Shift,     chars: "\x00F" } # motion-search (via tmux-thumbs)    #
+  - { key: W,          mods: Control,       chars: "\x00&" } # close tab (kill)                   #
+  - { key: T,          mods: Control,       chars: "\x00c" } # new tab                            #
+  - { key: RBracket,   mods: Alt,           chars: "\x00n" } # select next tab                    #
+  - { key: LBracket,   mods: Alt,           chars: "\x00p" } # select previous tab                #
+  - { key: RBracket,   mods: Control,       chars: "\x00o" } # select next pane                   #
+  - { key: LBracket,   mods: Control,       chars: "\x00;" } # select last (previously used) pane #
+  - { key: 127,                             chars: "\x00"  } # prefix                             # TODO: replace with `Menu` when `ffi:XK_Menu` enabled in https://github.com/rust-windowing/winit/blob/master/src/platform_impl/linux/x11/events.rs
+  ################################################################################################
 
   - { key: V,        mods: Command,       action: Paste                        }
   - { key: C,        mods: Command,       action: Copy                         }
