@@ -5,8 +5,8 @@ systemctl disable kexec-load@.service
 systemctl enable kexec-load@`uname -r | grep -oPe '\d+\.\d+'`-`uname -m`.service
 
 autorandr --change
-picom --daemon --experimental-backends	# standalone window compositor
-wmname LG3D				# shamelessly fake wm name to make Java application works
+picom --daemon      # standalone window compositor
+wmname LG3D         # shamelessly fake wm name to make Java application works
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 0
 if [[ $projector = *connected* ]]; then
@@ -68,6 +68,8 @@ dunst &
 xwallpaper --center `ls ~/Pictures/wallpapers/* | shuf | tail -1`
 env SXHKD_SHELL=sh sxhkd &
 ibus-daemon -drx
+dcnnt
+safeeyes --enable &
 
 prime-run polybar top --quiet &
 if [[ $projector = *connected* ]]; then
