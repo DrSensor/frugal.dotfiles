@@ -60,11 +60,11 @@ roots = ["package.json"]
 command = "typescript-language-server"
 args = ["--stdio"]
 
-[language.deno]
-filetypes = ["typescript", "javascript"]
-roots = ["import_map.json"]
-command = "deno"
-args = ["lsp"]
+# [language.deno]
+# filetypes = ["typescript", "javascript"]
+# roots = ["import_map.json"]
+# command = "deno"
+# args = ["lsp"]
 
 # [language.deno.settings]
 # enable = true

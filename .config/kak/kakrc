@@ -110,11 +110,11 @@ map global user l %{: enter-user-mode lsp<ret>} -docstring "LSP mode"
 hook global WinSetOption filetype=.* %{
 	lsp-enable-window
 	lsp-auto-hover-enable
-	map window normal <F2> ':lsp-rename-prompt<ret>'
+	map window normal <F3> ':lsp-rename-prompt<ret>'
 	# BUG: doesn't return back into insert mode
 	# map window insert <F2> '<esc>:lsp-rename-prompt<ret>i'
-	map window normal <F3> ':lsp-formatting<ret>'
-	map window insert <F3> '<esc>:lsp-formatting<ret>i'
+	map window normal <F2> ':lsp-formatting<ret>'
+	map window insert <F2> '<esc>:lsp-formatting<ret>i'
 }
 hook global WinSetOption filetype=rust %{
 	hook window -group rust-inlay-hints BufReload .* rust-analyzer-inlay-hints
@@ -144,6 +144,11 @@ hook global WinSetOption filetype=go %{
 	hook -once -always window WinSetOption filetype=.* %{
 		remove-hooks window semantic-tokens
 	}
+}
+hook global WinSetOption filetype=(javascript|typescript) %{
+	add-highlighter shared/javascript/ regex => 0:keyword
+	add-highlighter shared/javascript/ regex ':\s*([a-zA-Z<>]+)' 1:type
+	add-highlighter shared/javascript/ regex '[(,]+\s*([\w$]+)\s*:?' 1:variable
 }
 hook global WinSetOption filetype=(nim|javascript|typescript|python) %{
 	set-option buffer indentwidth 2
