@@ -1,4 +1,4 @@
-command_timeout = 0
+command_timeout = 220
 add_newline = false
 # TODO: refactor to right_format mode
 # format = """$time$cmd_duration$character"""
@@ -209,14 +209,15 @@ symbol = "~"
 ################################################################
 
 [nodejs]
+detect_extensions = []
 format = "[[$symbol$version](bg:$style bold #64de64)]($style)"
 style = "#3a3a3a"
 symbol = ""
 
 [deno]
+detect_extensions = []
 format = "[[$symbol$version](bg:$style bold white)]($style)"
 style = "#3a3a3a"
-detect_extensions = ["jsx", "tsx"]
 symbol = "🦕"
 
 [dart]
