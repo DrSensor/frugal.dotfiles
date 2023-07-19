@@ -6,7 +6,7 @@ file-types = ["rs"]
 roots = ["Cargo.toml", "Cargo.lock"]
 auto-format = true
 comment-token = "//"
-language-server = { command = "rust-analyzer" }
+language-server = { command = "rustup", args = ["run", "nightly", "rust-analyzer"] }
 indent = { tab-width = 4, unit = "    " }
 
 [[language]]
@@ -16,7 +16,7 @@ injection-regex = "toml"
 file-types = ["toml"]
 roots = []
 comment-token = "#"
-
+language-server = { command = "taplo", args = ["lsp", "stdio"] }
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
@@ -67,11 +67,25 @@ indent = { tab-width = 2, unit = "  " }
 [[language]]
 name = "json"
 scope = "source.json"
-injection-regex = "json"
+injection-regex = "jsonc?"
 file-types = ["json"]
-roots = []
-
+roots = ["deno.json", "deno.jsonc"]
+comment-token = "//"
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp"], language-id = "jsonc" }
 indent = { tab-width = 2, unit = "  " }
+
+# [[language]]
+# name = "json"
+# scope = "source.json"
+# injection-regex = "json"
+# file-types = ["json"]
+# roots = []
+# language-server = { command = "vscode-json-language-server", args = ["--stdio"] }
+# auto-format = true
+# config = { provideFormatter = true }
+# indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "c"
@@ -106,6 +120,16 @@ comment-token = "//"
 indent = { tab-width = 4, unit = "\t" }
 
 [[language]]
+name = "odin"
+auto-format = false
+scope = "source.odin"
+file-types = ["odin"]
+roots = ["ols.json"]
+language-server = { command = "ols", args = [] }
+comment-token = "//"
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
 name = "go"
 scope = "source.go"
 injection-regex = "go"
@@ -121,38 +145,103 @@ indent = { tab-width = 4, unit = "\t" }
 [[language]]
 name = "javascript"
 scope = "source.js"
-injection-regex = "^(js|javascript)$"
+injection-regex = "js|mjs|javascript"
 file-types = ["js", "mjs"]
-shebangs = ["node"]
-roots = ["tsfmt.json", "tsconfig.json", "package.json"]
+shebangs = ["deno"]
+roots = ["deno.json", "deno.jsonc"]
 comment-token = "//"
-# TODO: highlights-jsx, highlights-params
-
-language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "javascript" }
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp"], language-id = "javascript" }
 indent = { tab-width = 2, unit = "  " }
+diagnostic-severity = "Hint"
+
+# [[language]]
+# name = "javascript"
+# scope = "source.js"
+# injection-regex = "js|javascript"
+# file-types = ["js", "jsx", "mjs"]
+# shebangs = ["node"]
+# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json"], ["jsconfig.json"], ["package.json"], ["tsconfig.json"], ["deno.json"]
+# comment-token = "//"
+# auto-format = false
+# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "javascript" }
+# indent = { tab-width = 2, unit = "  " }
+
+[[language]]
+name = "jsx"
+scope = "source.jsx"
+injection-regex = "jsx"
+file-types = ["jsx"]
+shebangs = ["deno"]
+roots = ["deno.json", "deno.jsonc"]
+comment-token = "//"
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp"], language-id = "jsx" }
+indent = { tab-width = 2, unit = "  " }
+diagnostic-severity = "Hint"
+
+# [[language]]
+# name = "jsx"
+# scope = "source.jsx"
+# injection-regex = "jsx"
+# file-types = ["jsx"]
+# roots = ["tsfmt.json", "tsconfig.json", "package.json"]
+# shebangs = ["tsx"]
+# comment-token = "//"
+# auto-format = false
+# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "javascript" }
+# indent = { tab-width = 2, unit = "  " }
+# grammar = "javascript"
 
 [[language]]
 name = "typescript"
 scope = "source.ts"
-injection-regex = "^(ts|typescript)$"
-file-types = ["ts"]
-roots = ["tsfmt.json", "tsconfig.json", "package.json"]
-shebangs = []
-# TODO: highlights-jsx, highlights-params
-
-language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescript"}
+injection-regex = "ts|mts|typescript"
+file-types = ["ts", "mts"]
+shebangs = ["deno"]
+roots = ["deno.json", "deno.jsonc"]
+comment-token = "//"
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp", "--unstable"], language-id = "typescript" }
 indent = { tab-width = 2, unit = "  " }
+diagnostic-severity = "Hint"
+
+# [[language]]
+# name = "typescript"
+# scope = "source.ts"
+# injection-regex = "ts|typescript"
+# file-types = ["ts", "cts", "mts"]
+# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json", "tsconfig.json", "package.json"]
+# shebangs = ["tsx"]
+# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescript" }
+# indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "tsx"
 scope = "source.tsx"
-injection-regex = "^(tsx)$" # |typescript
+injection-regex = "tsx"
 file-types = ["tsx"]
-roots = ["tsfmt.json", "tsconfig.json", "package.json"]
-# TODO: highlights-jsx, highlights-params
-
-language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescriptreact" }
+shebangs = ["deno"]
+roots = ["deno.json", "deno.jsonc"]
+comment-token = "//"
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp"], language-id = "tsx" }
 indent = { tab-width = 2, unit = "  " }
+diagnostic-severity = "Hint"
+
+# [[language]]
+# name = "tsx"
+# scope = "source.tsx"
+# injection-regex = "tsx" # |typescript
+# file-types = ["tsx"]
+# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json", "tsconfig.json", "package.json"]
+# shebangs = ["tsx"]
+# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescriptreact" }
+# indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "css"
@@ -160,17 +249,40 @@ scope = "source.css"
 injection-regex = "css"
 file-types = ["css"]
 roots = ["index.html"]
-
+# formatter = { command = "sass", args = ["--stdin"] } # too powerful that make PostCSS mostly useless 😂
+formatter = { command = 'prettier', args = ["--parser", "css", "--plugin-search-dir=/home/wildan/.asdf/installs/nodejs/18.8.0/.npm/lib/node_modules"] }
+language-server = { command = "vscode-css-language-server", args = ["--stdio"], language-id = "css" }
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "html"
 scope = "text.html.basic"
 injection-regex = "html"
-file-types = ["html"]
+file-types = ["html", "htm", "njk", "django", "jinja", "erb", "mustache", "hbs", "php"]
 roots = []
+auto-format = false
+# formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
+language-server = { command = "vscode-html-language-server", args = ["--stdio"] }
+config = { autoClosingTags = true, autoCreateQuotes = false, provideFormatter = true, format = { endWithNewline = true, templating = true, indentHandlebars = true, indentScripts = "separate" } }
+# config = { suggest = { hideAutoCompleteProposals = true }, provideFormatter = true, format = { endWithNewline = true, templating = true, indentHandlebars = true, indentScripts = "separate" } }
+# config = { provideFormatter = true, css = true, javascript = true }
+# language-server = { command = "tailwindcss-language-server", args = ["--stdio"] }
+indent = { tab-width = 2, unit = " " }
 
-indent = { tab-width = 2, unit = "  " }
+[[language]]
+name = "ejs"
+scope = "text.html.ejs"
+injection-regex = "ejs"
+file-types = ["ejs"]
+roots = ["index.ejs"]
+auto-format = false
+formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
+language-server = { command = "vscode-html-language-server", args = ["--stdio"] }
+config = { provideFormatter = false, css = true, javascript = true }
+# language-server = { command = "tailwindcss-language-server", args = ["--stdio"] }
+indent = { tab-width = 2, unit = " " }
+
+# TODO: support tailwind https://github.com/helix-editor/helix/issues/2213
 
 [[language]]
 name = "python"
@@ -185,6 +297,7 @@ language-server = { command = "pylsp" }
 # TODO: pyls needs utf-8 offsets
 indent = { tab-width = 4, unit = "    " }
 
+
 [[language]]
 name = "nix"
 scope = "source.nix"
@@ -194,8 +307,10 @@ shebangs = []
 roots = []
 comment-token = "#"
 
-language-server = { command = "rnix-lsp" }
+config = { nil = { formatting = { command = ["nixfmt"] } } }
+language-server = { command = "nil" }
 indent = { tab-width = 2, unit = "  " }
+
 
 [[language]]
 name = "ruby"
@@ -308,6 +423,7 @@ file-types = ["lua"]
 shebangs = ["lua"]
 roots = []
 comment-token = "--"
+language-server = { command = "lua-language-server" }
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
@@ -458,6 +574,17 @@ file-types = ["td"]
 comment-token = "//"
 indent = { tab-width = 2, unit = "  " }
 injection-regex = "tablegen"
+
+[[language]]
+name = "markdown"
+scope = "source.md"
+injection-regex = "md|markdown"
+file-types = ["md"]
+roots = ["deno.json", "deno.jsonc"]
+auto-format = true
+config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
+language-server = { command = "deno", args = ["lsp"], language-id = "jsonc" }
+indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "markdown"

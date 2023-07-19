@@ -1,8 +1,41 @@
-theme = "bogster"
+# https://github.com/helix-editor/helix/blob/master/helix-term/src/config.rs#L12-L20
 
-[lsp]
-display-messages = true
+theme = "ayu_evolve"
 
-[editor]
+[editor] # https://github.com/helix-editor/helix/blob/master/helix-view/src/editor.rs#L109-L146
+bufferline = "multiple"
 line-number = "relative"
 auto-pairs  = true
+cursorcolumn = true
+cursorline = true
+color-modes = true
+completion-trigger-len = 1
+idle-timeout = 0
+
+[editor.indent-guides]
+render = true
+
+[editor.cursor-shape]
+insert = "bar"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "separator", "file-name", "spinner"]
+center = ["selections", "separator", "file-type", "diagnostics"]
+right = ["position-percentage", "separator", "position"]
+separator = ""
+
+[editor.file-picker]
+hidden = false
+
+[editor.lsp]
+display-messages = true
+
+[keys.normal]
+S-tab = ":format"
+D = ["extend_to_line_end", "delete_selection_noyank"]
+V = "extend_line"
+
+[keys.insert]
+S-tab = ":format"
+C-s = ":write"
