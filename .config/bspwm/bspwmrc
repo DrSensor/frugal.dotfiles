@@ -59,9 +59,10 @@ bspc rule -a '*:Godot_Engine' state=floating center=on  # BUG: godot set WM_CLAS
 
 # TODO: replace with xset dpms
 # TODO: synchronize `-locker $command` behaviour with polybar powerbutton
-xautolock -time 10 -notify 1 -detectsleep \
-          -locker "systemctl suspend" \
-          -nowlocker "${0%/*}/lockscreen $DISPLAY" &
+# xautolock -time 10 -notify 1 -detectsleep \
+#           -locker "systemctl suspend" \
+#           -nowlocker "${0%/*}/lockscreen $DISPLAY" &
+# WARNING:👆conflict with light-locker
 
 redshift &
 dunst &
