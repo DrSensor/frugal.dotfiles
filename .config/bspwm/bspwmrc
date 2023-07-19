@@ -76,5 +76,3 @@ prime-run polybar top --quiet &
 if [[ $projector = *connected* ]]; then
     prime-run polybar bottom --quiet &
 fi
-
-fbautostart
