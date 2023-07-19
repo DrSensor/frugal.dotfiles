@@ -13,7 +13,6 @@ alias open "handlr open" # also please manually install `xdg-utils-handlr` which
 starship init fish | source
 zoxide init fish | source
 the-way complete fish | source
-/home/linuxbrew/.linuxbrew/bin/brew shellenv | source
 
 end
 
