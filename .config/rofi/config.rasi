@@ -2,7 +2,7 @@ configuration {
    terminal: "kitty";
    show-icons: true;
    kb-row-tab: "";
-   kb-row-select: "Tab";
+   /*kb-row-select: "Tab";*/
    line-margin: 0;
    line-padding: 1;
    drun-display-format: "{name}";
