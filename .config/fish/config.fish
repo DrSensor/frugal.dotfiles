@@ -7,12 +7,9 @@ set -x MANPAGER "sh -c 'col -b | bat -l man -p'"
 
 alias project-tree "exa --git-ignore --tree --all -I .git"
 alias task dstask
-alias snippet the-way
 alias open "handlr open" # also please manually install `xdg-utils-handlr` which automatically replace😞`xdg-utils` then shim `xdg-open`
 
-starship init fish | source
-zoxide init fish | source
-the-way complete fish | source
+alias snippet the-way
 
 end
 
