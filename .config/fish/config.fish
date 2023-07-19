@@ -1,5 +1,5 @@
-if [ "$TERM_PROGRAM" != "vscode" ] && [ $TERM = "xterm-256color" ] || [ $TERM = "linux" ]
-  exec tmux
+if test \( -z "$TERM_PROGRAM" \) -a \( $TERM != "xterm-kitty" \) -a \( -z "$SSH_CONNECTION" \)
+  exec tmux # try zellij
 end
 
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish#L20
@@ -38,15 +38,17 @@ end
 
 
 function cmdsave -d "save previous command as snippet"
-  set line (echo $history[1])
-  snippet cmd $line
+  set line $history[1]
+  snippet cmd "$line"
 end
 function cmdsearch -d "search commands saved as snippet"
   commandline (snippet search --languages=sh --stdout)
 end
-function cmdsync -d "sync commands saved as snippet into GitHub Gist"
-  THE_WAY_GITHUB_TOKEN=(pass gist.github.com/token) snippet sync
+function snippet\ sync -d "sync commands saved as snippet into GitHub Gist"
+  THE_WAY_GITHUB_TOKEN=(pass gist.github.com/token) snippet sync $argv
 end
+alias cmdsync "snippet\ sync date"
+
 
 function mv--swap -d "Swap (rename) between 2 files"
   # TODO: this should be rewritten as cli via syscall renameat2(2) but with parallize batch swapping
@@ -57,10 +59,6 @@ function mv--swap -d "Swap (rename) between 2 files"
   # NEWS: seems like it's coming as `mv --swap` https://lists.gnu.org/archive/html/coreutils/2021-05/msg00030.html
 end
 
-
-for dir in /opt/asdf-vm ~/.asdf
-  test -d $dir && source $dir/asdf.fish && break
-end
 # if status is-interactive
 #   ## do `atuin import fish` manually in your terminal prompt
 #   atuin init fish | ATUIN_NOBIND=true source
@@ -182,8 +180,5 @@ function livestream-to-android
   set_color green; echo "please open <udp://$endpoint:5554> in your Android phone"
   set_color normal
 end
-
-
-set fish_greeting
 
 source ~/.asdf/asdf-vm/asdf.fish
