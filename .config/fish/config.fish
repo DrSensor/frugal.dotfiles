@@ -11,7 +11,31 @@ alias open "handlr open" # also please manually install `xdg-utils-handlr` which
 
 alias snippet the-way
 
+function vi_cursor # alacritty workaround https://github.com/fish-shell/fish-shell/issues/7458
+  switch $fish_bind_mode # BUG: this already fixed in the upstream but somehow it doesn't works
+    case default
+      printf "\e[2 q"
+    case insert
+      printf "\e[6 q"
+    case replace_one
+      printf "\e[4 q"
+    case visual
+      printf "\e[4 q"
+  end
 end
+
+# because starship init erase fish_mode_prompt from builtin functions
+builtin functions -c fish_prompt starship_prompt
+function fish_prompt
+  vi_cursor
+  starship_prompt
+end
+# builtin functions -c fish_right_prompt starship_right_prompt
+# function fish_right_prompt
+#   vi_cursor
+#   starship_right_prompt
+# end
+
 
 function cmdsave -d "save previous command as snippet"
   set line (echo $history[1])
