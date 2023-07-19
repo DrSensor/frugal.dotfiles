@@ -57,30 +57,30 @@ function mv--swap -d "Swap (rename) between 2 files"
   # NEWS: seems like it's coming as `mv --swap` https://lists.gnu.org/archive/html/coreutils/2021-05/msg00030.html
 end
 
-if status is-interactive
-  ## do `atuin import fish` manually in your terminal prompt
-  atuin init fish | ATUIN_NOBIND=true source
-  function _atuin_fzf
-    set h (atuin search --cmd-only (commandline -b) | fzf)
-    commandline -f repaint
-    if test -n "$h"
-      commandline -r $h
-    end
-  end
-  function _atuin_fuzzy_search
-    mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
-    _atuin_search
-    mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
-  end
-  ## keycode found via `xxd -psd`
-  bind \e\[1\;2A _atuin_search        # Shift+Up
-  bind \e\[1\;6A _atuin_fuzzy_search  # Ctrl+Shift+Up
-  bind \e\[1\;4A _atuin_fzf           # Alt+Shift+Up
-end
 
 for dir in /opt/asdf-vm ~/.asdf
   test -d $dir && source $dir/asdf.fish && break
 end
+# if status is-interactive
+#   ## do `atuin import fish` manually in your terminal prompt
+#   atuin init fish | ATUIN_NOBIND=true source
+#   function _atuin_fzf
+#     set h (atuin search --cmd-only (commandline -b) | fzf)
+#     commandline -f repaint
+#     if test -n "$h"
+#       commandline -r $h
+#     end
+#   end
+#   function _atuin_fuzzy_search
+#     mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+#     _atuin_search
+#     mv--swap ~/.config/atuin/config{.toml,.fuzzy.toml}
+#   end
+#   ## keycode found via `xxd -psd`
+#   bind \e\[1\;2A _atuin_search        # Shift+Up
+#   bind \e\[1\;6A _atuin_fuzzy_search  # Ctrl+Shift+Up
+#   bind \e\[1\;4A _atuin_fzf           # Alt+Shift+Up
+# end
 
 function get-twitch_token
   twitch token -u -s "chat:edit chat:read" &| grep -oP 'User Access Token: \K[a-z0-9]+'
