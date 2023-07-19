@@ -1,0 +1,59 @@
+session: blog
+
+root: ~/Projects/Personal/site # all commands will be relative to `root`
+
+# before_start:
+#   - nix develop
+
+# stop:
+#   - pkill zola
+#   - exit
+
+env:
+  IDE_MODE: writing
+
+windows:
+  - name: content
+    root: content # a relative path to root
+    manual: true # you can start this window only manually, using the -w arg
+    layout: main-vertical
+    commands:
+      - xplnr
+    panes:
+      - type: horizontal
+        root: ..
+        commands:
+          - zola serve
+
+  - name: theme
+    root: themes
+    manual: true # you can start this window only manually, using the -w arg
+    layout: main-vertical
+    commands:
+      - xplnr
+    panes:
+      - type: horizontal
+        root: ..
+        commands:
+          - zola serve
+
+  - name: git
+    root: .
+    layout: tiled
+    panes:
+      - type: vertical
+        root: .
+        commands:
+          - gitui
+      - type: horizontal
+        root: content/posts
+        commands:
+          - gitui
+      - type: horizontal
+        root: content/notes
+        commands:
+          - gitui
+      - type: vertical
+        root: themes/devlog
+        commands:
+          - gitui
