@@ -1,13 +1,135 @@
+[use-grammars]
+only = ["pomsky", "wat", "wast"]
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+config.inlayHints.bindingModeHints.enable = false
+config.inlayHints.closingBraceHints.minLines = 10
+config.inlayHints.closureReturnTypeHints.enable = "with_block"
+config.inlayHints.discriminantHints.enable = "fieldless"
+config.inlayHints.lifetimeElisionHints.enable = "skip_trivial"
+config.inlayHints.typeHints.hideClosureInitialization = false
+
+[language-server.gopls]
+command = "gopls"
+config.hints.assignVariableTypes = true
+config.hints.compositeLiteralFields = true
+config.hints.constantValues = true
+config.hints.functionTypeParameters = true
+config.hints.parameterNames = true
+config.hints.rangeVariableTypes = true
+
+[language-server.golangci-lint-lsp]
+command = "golangci-lint-langserver"
+config.command = ["golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1"]
+
+[language-server.elixir-ls]
+command = "elixir-ls"
+config.elixirLS.dialyzerEnabled = false
+
+[language-server.luals]
+command = "lua-language-server"
+config.Lua.hint.enable = true
+config.Lua.hint.arrayIndex = "Enable"
+config.Lua.hint.setType = true
+config.Lua.hint.paramName = "All"
+config.Lua.hint.paramType = true
+config.Lua.hint.await = true
+
+[language-server.vscode-json]
+command = "vscode-json-language-server"
+args = ["stdio"]
+config.provideFormatter = true
+config.json.validate.enable = true
+
+[language-server.redhat-yaml]
+command = "yaml-language-server"
+args = ["--stdio"]
+config.format.enable = true
+config.format.singleQuote = false
+config.format.bracketSpacing = true
+config.format.proseWrap = true
+config.format.printWidth = 80
+config.validate = true
+config.hover = true
+config.completion = true
+
+[language-server.vscode-html]
+command = "vscode-html-language-server"
+args = ["--stdio"]
+config.provideFormatter = true
+config.css = true
+config.javascript = true
+config.autoClosingTags = true
+config.autoCreateQuotes = false
+config.suggest.hideAutoCompleteProposals = true
+config.format.endWithNewline = true
+config.format.templating = true
+config.format.indentHandlebars = true
+config.format.indentScripts = "separate"
+
+[language-server.vscode-css]
+command = "vscode-css-language-server"
+args = ["--stdio"]
+config.provideFormatter = true
+config.css.validate.enable = true
+
+[language-server.tailwindcss]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+config.includeLanguages = { templ = "html" }
+
+[language-server.deno]
+command = "deno"
+args = ["lsp"]
+config.enable = true
+config.lint = true
+config.unstable = true
+config.codeLens.implementations = true
+config.codeLens.references = true
+config.codeLens.referencesAllFunctions = true
+config.codeLens.test = true
+config.inlayHints.enumMemberValues.enabled = true
+config.inlayHints.functionLikeReturnTypes.enabled = true
+config.inlayHints.parameterNames.enabled = "literals"
+config.inlayHints.parameterNames.suppressWhenArgumentMatchesName = true
+config.inlayHints.parameterType.enabled = true
+config.inlayHints.propertyDeclarationTypes.enabled = true
+config.inlayHints.variableTypes.enabled = true
+config.inlayHints.variableTypes.suppressWhenTypeMatchesName = true
+config.maxTsServerMemory = 2048 # 2GB
+
+[language-server]
+taplo = { command = "taplo", args = ["lsp", "stdio"] }
+biome = { command = "biome", args = ["lsp-proxy"] }
+pylsp = { commad = "pylsp" }
+clangd = { command = "clangd" }
+ols = { command = "ols" }
+omnisharp = { command = "OmniSharp", args = [ "--languageserver" ] }
+vscode-typescript = { command = "typescript-language-server", args = ["stdio"] }
+templ = { command = "templ", args = ["lsp"] }
+nil = { command = "nil", config = { nil = { formatting = { command = ["nixfmt"] } } } }
+bash-lsp = { command = "bash-language-server", args = ["start"] }
+zls = { command = "zls" }
+wgsl-analyzer = { command = "wgsl-analyzer" }
+marksman = { command = "marksman", args = ["server"] }
+dart = { command = "dart", args = ["language-server", "--client-id=helix"] }
+kotlin-language-server = { command = "kotlin-language-server" }
+rescript-language-server = { command = "rescript-language-server", args = ["--stdio"] }
+sourcekit-lsp = { command = "sourcekit-lsp" }
+
+# NOTE: if deno/vscode lsp not work, it may need `language-id = "..."`
+
 [[language]]
 name = "rust"
 scope = "source.rust"
 injection-regex = "rust"
 file-types = ["rs"]
-roots = ["Cargo.toml", "Cargo.lock"]
+roots = ["Cargo.toml", "Cargo.lock", "rust-project.json"]
 auto-format = true
 comment-token = "//"
-language-server = { command = "rustup", args = ["run", "nightly", "rust-analyzer"] }
 indent = { tab-width = 4, unit = "    " }
+language-servers = ["rust-analyzer"]
 
 [[language]]
 name = "toml"
@@ -16,8 +138,8 @@ injection-regex = "toml"
 file-types = ["toml"]
 roots = []
 comment-token = "#"
-language-server = { command = "taplo", args = ["lsp", "stdio"] }
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["taplo"]
 
 [[language]]
 name = "protobuf"
@@ -26,7 +148,6 @@ injection-regex = "protobuf"
 file-types = ["proto"]
 roots = []
 comment-token = "//"
-
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
@@ -37,9 +158,8 @@ file-types = ["ex", "exs"]
 shebangs = ["elixir"]
 roots = []
 comment-token = "#"
-
-language-server = { command = "elixir-ls" }
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["elixir-ls"]
 
 [[language]]
 name = "fish"
@@ -49,43 +169,7 @@ file-types = ["fish"]
 shebangs = ["fish"]
 roots = []
 comment-token = "#"
-
 indent = { tab-width = 4, unit = "    " }
-
-[[language]]
-name = "mint"
-scope = "source.mint"
-injection-regex = "mint"
-file-types = ["mint"]
-shebangs = []
-roots = []
-comment-token = "//"
-
-language-server = { command = "mint", args = ["ls"] }
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "json"
-scope = "source.json"
-injection-regex = "jsonc?"
-file-types = ["json"]
-roots = ["deno.json", "deno.jsonc"]
-comment-token = "//"
-auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp"], language-id = "jsonc" }
-indent = { tab-width = 2, unit = "  " }
-
-# [[language]]
-# name = "json"
-# scope = "source.json"
-# injection-regex = "json"
-# file-types = ["json"]
-# roots = []
-# language-server = { command = "vscode-json-language-server", args = ["--stdio"] }
-# auto-format = true
-# config = { provideFormatter = true }
-# indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "c"
@@ -94,9 +178,9 @@ injection-regex = "c"
 file-types = ["c"] # TODO: ["h"]
 roots = []
 comment-token = "//"
-
-language-server = { command = "clangd" }
+auto-format = true
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["clangd"]
 
 [[language]]
 name = "cpp"
@@ -105,9 +189,9 @@ injection-regex = "cpp"
 file-types = ["cc", "hh", "cpp", "hpp", "h", "ipp", "tpp", "cxx", "hxx", "ixx", "txx", "ino"]
 roots = []
 comment-token = "//"
-
-language-server = { command = "clangd" }
+auto-format = true
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["clangd"]
 
 [[language]]
 name = "c-sharp"
@@ -116,8 +200,8 @@ injection-regex = "c-?sharp"
 file-types = ["cs"]
 roots = []
 comment-token = "//"
-
 indent = { tab-width = 4, unit = "\t" }
+language-servers = ["omnisharp"]
 
 [[language]]
 name = "odin"
@@ -125,22 +209,44 @@ auto-format = false
 scope = "source.odin"
 file-types = ["odin"]
 roots = ["ols.json"]
-language-server = { command = "ols", args = [] }
 comment-token = "//"
 indent = { tab-width = 4, unit = "\t" }
+language-servers = ["ols"]
 
 [[language]]
 name = "go"
 scope = "source.go"
 injection-regex = "go"
 file-types = ["go"]
-roots = ["Gopkg.toml", "go.mod"]
+roots = ["go.work", "go.mod"]
 auto-format = true
 comment-token = "//"
-
-language-server = { command = "gopls" }
-# TODO: gopls needs utf-8 offsets?
 indent = { tab-width = 4, unit = "\t" }
+language-servers = ["gopls", "golangci-lint-lsp"] # TODO: gopls needs utf-8 offsets?
+
+[[language]]
+name = "templ"
+scope = "source.templ"
+file-types = ["templ"]
+roots = ["go.work", "go.mod"]
+comment-token = "//"
+indent = { tab-width = 2, unit = "  " }
+language-servers = [
+  "templ",
+  "tailwindcss",
+]
+
+[[language]]
+name = "json"
+scope = "source.json"
+injection-regex = "jsonc?"
+file-types = ["json"]
+roots = []
+comment-token = '"//": '
+auto-format = true
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["biome", "deno"]
+# formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.json"] }
 
 [[language]]
 name = "javascript"
@@ -148,25 +254,13 @@ scope = "source.js"
 injection-regex = "js|mjs|javascript"
 file-types = ["js", "mjs"]
 shebangs = ["deno"]
-roots = ["deno.json", "deno.jsonc"]
+roots = ["deno.json", "deno.jsonc", "jsconfig.json", "package.json"]
 comment-token = "//"
 auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp"], language-id = "javascript" }
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-
-# [[language]]
-# name = "javascript"
-# scope = "source.js"
-# injection-regex = "js|javascript"
-# file-types = ["js", "jsx", "mjs"]
-# shebangs = ["node"]
-# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json"], ["jsconfig.json"], ["package.json"], ["tsconfig.json"], ["deno.json"]
-# comment-token = "//"
-# auto-format = false
-# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "javascript" }
-# indent = { tab-width = 2, unit = "  " }
+language-servers = ["deno", "biome"]
+# formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.js"] }
 
 [[language]]
 name = "jsx"
@@ -174,26 +268,17 @@ scope = "source.jsx"
 injection-regex = "jsx"
 file-types = ["jsx"]
 shebangs = ["deno"]
-roots = ["deno.json", "deno.jsonc"]
+roots = ["deno.json", "deno.jsonc", "jsconfig.json", "package.json"]
 comment-token = "//"
 auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp"], language-id = "jsx" }
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-
-# [[language]]
-# name = "jsx"
-# scope = "source.jsx"
-# injection-regex = "jsx"
-# file-types = ["jsx"]
-# roots = ["tsfmt.json", "tsconfig.json", "package.json"]
-# shebangs = ["tsx"]
-# comment-token = "//"
-# auto-format = false
-# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "javascript" }
-# indent = { tab-width = 2, unit = "  " }
-# grammar = "javascript"
+language-servers = [
+  "deno",
+  "biome",
+  "tailwindcss",
+]
+# formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.jsx"] }
 
 [[language]]
 name = "typescript"
@@ -201,23 +286,13 @@ scope = "source.ts"
 injection-regex = "ts|mts|typescript"
 file-types = ["ts", "mts"]
 shebangs = ["deno"]
-roots = ["deno.json", "deno.jsonc"]
+roots = ["deno.json", "deno.jsonc", "tsconfig.json", "package.json"]
 comment-token = "//"
 auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp", "--unstable"], language-id = "typescript" }
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-
-# [[language]]
-# name = "typescript"
-# scope = "source.ts"
-# injection-regex = "ts|typescript"
-# file-types = ["ts", "cts", "mts"]
-# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json", "tsconfig.json", "package.json"]
-# shebangs = ["tsx"]
-# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescript" }
-# indent = { tab-width = 2, unit = "  " }
+language-servers = ["deno", "biome"]
+# formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.ts"] }
 
 [[language]]
 name = "tsx"
@@ -225,23 +300,17 @@ scope = "source.tsx"
 injection-regex = "tsx"
 file-types = ["tsx"]
 shebangs = ["deno"]
-roots = ["deno.json", "deno.jsonc"]
+roots = ["deno.json", "deno.jsonc", "tsconfig.json", "package.json"]
 comment-token = "//"
 auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp"], language-id = "tsx" }
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-
-# [[language]]
-# name = "tsx"
-# scope = "source.tsx"
-# injection-regex = "tsx" # |typescript
-# file-types = ["tsx"]
-# roots = ["tsfmt.json", "tsconfig.json", "package.json"] # select one of this ["tsfmt.json", "tsconfig.json", "package.json"]
-# shebangs = ["tsx"]
-# language-server = { command = "typescript-language-server", args = ["--stdio"], language-id = "typescriptreact" }
-# indent = { tab-width = 2, unit = "  " }
+language-servers = [
+  "deno",
+  "biome",
+  "tailwindcss",
+]
+# formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.tsx"] }
 
 [[language]]
 name = "css"
@@ -249,10 +318,10 @@ scope = "source.css"
 injection-regex = "css"
 file-types = ["css"]
 roots = ["index.html"]
-# formatter = { command = "sass", args = ["--stdin"] } # too powerful that make PostCSS mostly useless 😂
-formatter = { command = 'prettier', args = ["--parser", "css", "--plugin-search-dir=/home/wildan/.asdf/installs/nodejs/18.8.0/.npm/lib/node_modules"] }
-language-server = { command = "vscode-css-language-server", args = ["--stdio"], language-id = "css" }
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["vscode-css"]
+formatter = { command = 'prettier', args = ["--parser", "css", "--plugin-search-dir=/home/wildan/.asdf/installs/nodejs/18.8.0/.npm/lib/node_modules"] }
+# formatter = { command = "sass", args = ["--stdin"] } # too powerful that make PostCSS mostly useless 😂
 
 [[language]]
 name = "html"
@@ -261,13 +330,12 @@ injection-regex = "html"
 file-types = ["html", "htm", "njk", "django", "jinja", "erb", "mustache", "hbs", "php"]
 roots = []
 auto-format = false
+indent = { tab-width = 2, unit = "  " }
+language-servers = [
+  "vscode-html",
+  "tailwindcss",
+]
 # formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
-language-server = { command = "vscode-html-language-server", args = ["--stdio"] }
-config = { autoClosingTags = true, autoCreateQuotes = false, provideFormatter = true, format = { endWithNewline = true, templating = true, indentHandlebars = true, indentScripts = "separate" } }
-# config = { suggest = { hideAutoCompleteProposals = true }, provideFormatter = true, format = { endWithNewline = true, templating = true, indentHandlebars = true, indentScripts = "separate" } }
-# config = { provideFormatter = true, css = true, javascript = true }
-# language-server = { command = "tailwindcss-language-server", args = ["--stdio"] }
-indent = { tab-width = 2, unit = " " }
 
 [[language]]
 name = "ejs"
@@ -276,13 +344,13 @@ injection-regex = "ejs"
 file-types = ["ejs"]
 roots = ["index.ejs"]
 auto-format = false
-formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
-language-server = { command = "vscode-html-language-server", args = ["--stdio"] }
-config = { provideFormatter = false, css = true, javascript = true }
-# language-server = { command = "tailwindcss-language-server", args = ["--stdio"] }
 indent = { tab-width = 2, unit = " " }
+language-servers = [
+  "vscode-html",
+  "tailwindcss",
+]
+formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
 
-# TODO: support tailwind https://github.com/helix-editor/helix/issues/2213
 
 [[language]]
 name = "python"
@@ -290,13 +358,10 @@ scope = "source.python"
 injection-regex = "python"
 file-types = ["py"]
 shebangs = ["python"]
-roots = []
+roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
 comment-token = "#"
-
-language-server = { command = "pylsp" }
-# TODO: pyls needs utf-8 offsets
 indent = { tab-width = 4, unit = "    " }
-
+language-servers = ["pylsp"] # TODO: pyls needs utf-8 offsets
 
 [[language]]
 name = "nix"
@@ -306,23 +371,8 @@ file-types = ["nix"]
 shebangs = []
 roots = []
 comment-token = "#"
-
-config = { nil = { formatting = { command = ["nixfmt"] } } }
-language-server = { command = "nil" }
 indent = { tab-width = 2, unit = "  " }
-
-
-[[language]]
-name = "ruby"
-scope = "source.ruby"
-injection-regex = "ruby"
-file-types = ["rb"]
-shebangs = ["ruby"]
-roots = []
-comment-token = "#"
-
-language-server = { command = "solargraph", args = ["stdio"] }
-indent = { tab-width = 2, unit = "  " }
+language-servers = ["nil"]
 
 [[language]]
 name = "bash"
@@ -332,117 +382,18 @@ file-types = ["sh", "bash", "zsh", ".bash_login", ".bash_logout", ".bash_profile
 shebangs = ["sh", "bash", "dash"]
 roots = []
 comment-token = "#"
-
-language-server = { command = "bash-language-server", args = ["start"] }
 indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "php"
-scope = "source.php"
-injection-regex = "php"
-file-types = ["php"]
-shebangs = ["php"]
-roots = []
-
-indent = { tab-width = 4, unit = "    " }
-
-[[language]]
-name = "latex"
-scope = "source.tex"
-injection-regex = "tex"
-file-types = ["tex"]
-roots = []
-comment-token = "%"
-
-indent = { tab-width = 4, unit = "\t" }
-
-[[language]]
-name = "julia"
-scope = "source.julia"
-injection-regex = "julia"
-file-types = ["jl"]
-roots = ["pom.xml"]
-comment-token = "#"
-language-server = { command = "julia", args = [
-        "--startup-file=no",
-        "--history-file=no",
-        "--quiet",
-        "-e",
-        """
-                using LanguageServer;
-                using Pkg;
-                import StaticLint;
-                env_path = dirname(Pkg.Types.Context().env.project_file);
-                server = LanguageServer.LanguageServerInstance(stdin, stdout, env_path, "");
-                server.runlinter = true;
-                run(server);
-        """,
-        ] }
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "java"
-scope = "source.java"
-injection-regex = "java"
-file-types = ["java"]
-roots = []
-indent = { tab-width = 4, unit = "    " }
-
-[[language]]
-name = "ledger"
-scope = "source.ledger"
-injection-regex = "ledger"
-file-types = ["ldg", "ledger", "journal"]
-roots = []
-comment-token = ";"
-indent = { tab-width = 4, unit = "    " }
-
-[[language]]
-name = "ocaml"
-scope = "source.ocaml"
-injection-regex = "ocaml"
-file-types = ["ml"]
-shebangs = []
-roots = []
-comment-token = "(**)"
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "ocaml-interface"
-scope = "source.ocaml.interface"
-file-types = ["mli"]
-shebangs = []
-roots = []
-comment-token = "(**)"
-indent = { tab-width = 2, unit = "  "}
+language-servers = ["bash-lsp"]
 
 [[language]]
 name = "lua"
 scope = "source.lua"
-file-types = ["lua"]
+file-types = ["lua", "knit", "Knitfile", "knitfile"]
 shebangs = ["lua"]
-roots = []
+roots = [".luarc.json", ".luacheckrc", ".stylua.toml", "selene.toml"]
 comment-token = "--"
-language-server = { command = "lua-language-server" }
 indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "svelte"
-scope = "source.svelte"
-injection-regex = "svelte"
-file-types = ["svelte"]
-roots = []
-indent = { tab-width = 2, unit = "  " }
-language-server = { command = "svelteserver", args = ["--stdio"] }
-
-
-[[language]]
-name = "vue"
-scope = "source.vue"
-injection-regex = "vue"
-file-types = ["vue"]
-roots = []
-indent = { tab-width = 2, unit = "  " }
+language-servers = ["luals"]
 
 [[language]]
 name = "yaml"
@@ -452,16 +403,7 @@ roots = []
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
 injection-regex = "yml|yaml"
-
-[[language]]
-name = "haskell"
-scope = "source.haskell"
-injection-regex = "haskell"
-file-types = ["hs"]
-roots = []
-comment-token = "--"
-language-server = { command = "haskell-language-server-wrapper", args = ["--lsp"] }
-indent = { tab-width = 2, unit = "  " }
+language-servers = ["redhat-yaml"]
 
 [[language]]
 name = "zig"
@@ -471,46 +413,13 @@ file-types = ["zig"]
 roots = ["build.zig"]
 auto-format = true
 comment-token = "//"
-
-language-server = { command = "zls" }
 indent = { tab-width = 4, unit = "    " }
-
-[[language]]
-name = "prolog"
-scope = "source.prolog"
-roots = []
-file-types = ["pl", "prolog"]
-shebangs = ["swipl"]
-comment-token = "%"
-
-language-server = { command = "swipl", args = [
-    "-g", "use_module(library(lsp_server))",
-    "-g", "lsp_server:main",
-    "-t", "halt", "--", "stdio"] }
-
-[[language]]
-name = "tsq"
-scope = "source.tsq"
-file-types = ["scm"]
-roots = []
-comment-token = ";"
-injection-regex = "tsq"
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "cmake"
-scope = "source.cmake"
-file-types = ["cmake", "CMakeLists.txt"]
-roots = []
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-language-server = { command = "cmake-language-server" }
-injection-regex = "cmake"
+language-servers = ["zls"]
 
 [[language]]
 name = "make"
 scope = "source.make"
-file-types = ["Makefile", "makefile", "justfile", ".justfile"]
+file-types = ["Makefile", "makefile", "mk", "justfile", ".justfile"]
 roots =[]
 comment-token = "#"
 indent = { tab-width = 4, unit = "\t" }
@@ -523,24 +432,6 @@ roots = []
 comment-token = "//"
 indent = { tab-width = 4, unit = "    " }
 injection-regex = "glsl"
-
-[[language]]
-name = "perl"
-scope = "source.perl"
-file-types = ["pl", "pm"]
-shebangs = ["perl"]
-roots = []
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "racket"
-scope = "source.rkt"
-roots = []
-file-types = ["rkt"]
-shebangs = ["racket"]
-comment-token = ";"
-language-server = { command = "racket", args = ["-l", "racket-langserver"] }
 
 [[language]]
 name = "comment"
@@ -556,6 +447,42 @@ file-types = ["wgsl"]
 roots = []
 comment-token = "//"
 indent = { tab-width = 4, unit = "    " }
+language-servers = ["wgsl-analyzer"]
+
+[[language]]
+name = "wat"
+scope = "source.wat"
+file-types = ["wat"]
+injection-regex = "wat"
+roots = []
+comment-token = ";;"
+indent = { tab-width = 4, unit = "\t" }
+
+[[grammar]]
+name = "wat"
+source = { git = "https://github.com/wasm-lsp/tree-sitter-wasm", subpath = "wat", rev = "2ca28a9f9d709847bf7a3de0942a84e912f59088" }
+
+[[language]]
+name = "wast"
+scope = "source.wast"
+file-types = ["wast"]
+injection-regex = "wast"
+roots = []
+comment-token = ";;"
+indent = { tab-width = 4, unit = "\t" }
+
+[[grammar]]
+name = "wast"
+source = { git = "https://github.com/wasm-lsp/tree-sitter-wasm", subpath = "wast", rev = "2ca28a9f9d709847bf7a3de0942a84e912f59088" }
+
+[[language]]
+name = "nasm"
+scope = "source.nasm"
+file-types = ["asm", "s", "S", "nasm"]
+injection-regex = "n?asm"
+roots = []
+comment-token = "#"
+indent = { tab-width = 4, unit = "\t" }
 
 [[language]]
 name = "llvm"
@@ -580,11 +507,10 @@ name = "markdown"
 scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md"]
-roots = ["deno.json", "deno.jsonc"]
+roots = [".marksman.toml"]
 auto-format = true
-config = { enable = true, lint = true, unstable = true } # BUG: deno lsp can't format file/folder that start with underscore (i,e ecs/_internal/utils.js)
-language-server = { command = "deno", args = ["lsp"], language-id = "jsonc" }
 indent = { tab-width = 2, unit = "  " }
+language-servers = ["marksman"]
 
 [[language]]
 name = "markdown"
@@ -602,17 +528,8 @@ file-types = ["dart"]
 roots = ["pubspec.yaml"]
 auto-format = true
 comment-token = "//"
-language-server = { command = "dart", args = ["language-server", "--client-id=helix"] }
 indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "scala"
-scope = "source.scala"
-roots = ["build.sbt", "pom.xml"]
-file-types = ["scala", "sbt"]
-comment-token = "//"
-indent = { tab-width = 2, unit = "  " }
-language-server = { command = "metals" }
+language-servers = ["dart"]
 
 [[language]]
 name = "dockerfile"
@@ -622,7 +539,6 @@ roots = ["Dockerfile"]
 file-types = ["Dockerfile", "dockerfile"]
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
-language-server = { command = "docker-langserver", args = ["--stdio"] }
 
 [[language]]
 name = "git-commit"
@@ -658,6 +574,19 @@ file-types = ["regex"]
 roots = []
 
 [[language]]
+name = "pomsky"
+scope = "source.pomsky"
+injection-regex = "pomsky"
+file-types = ["pomsky", "pom"]
+indent = { tab-width = 2, unit = "  " }
+roots = []
+comment-token = "#"
+
+[[grammar]]
+name = "pomsky"
+source = { git = "https://github.com/pomsky-lang/tree-sitter-pomsky", rev = "f400fe869b6aca520f16ccc455d9920ac95f6964" }
+
+[[language]]
 name = "git-config"
 scope = "source.gitconfig"
 roots = []
@@ -676,17 +605,6 @@ roots = []
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
-name = "elm"
-scope = "source.elm"
-injection-regex = "elm"
-file-types = ["elm"]
-roots = ["elm.json"]
-auto-format = true
-comment-token = "--"
-language-server = { command = "elm-language-server" }
-indent = { tab-width = 4, unit = "    " }
-
-[[language]]
 name = "iex"
 scope = "source.iex"
 injection-regex = "iex"
@@ -701,17 +619,8 @@ file-types = ["res"]
 roots = ["bsconfig.json"]
 auto-format = true
 comment-token = "//"
-language-server = { command = "rescript-language-server", args = ["--stdio"] }
 indent = { tab-width = 2, unit = "  " }
-
-[[language]]
-name = "erlang"
-scope = "source.erlang"
-injection-regex = "^erl$"
-file-types = ["erl", "hrl", "app", "rebar.config"]
-roots = ["rebar.config"]
-comment-token = "%%"
-indent = { tab-width = 4, unit = "    " }
+language-servers = ["rescript-language-server"]
 
 [[language]]
 name = "kotlin"
@@ -720,15 +629,14 @@ file-types = ["kt", "kts"]
 roots = ["settings.gradle", "settings.gradle.kts"]
 comment-token = "//"
 indent = { tab-width = 4, unit = "    " }
-language-server = { command = "kotlin-language-server" } 
+language-servers = ["kotlin-language-server"] 
 
 [[language]]
-name = "hcl"
-scope = "source.hcl"
-injection-regex = "(hcl|tf)"
-file-types = ["hcl", "tf", "tfvars"]
-roots = []
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-language-server = { command = "terraform-ls", args = ["serve"] }
+name = "swift"
+scope = "source.swift"
+injection-regex = "swift"
+file-types = ["swift"]
+roots = ["Package.swift"]
+comment-token = "//"
 auto-format = true
+language-servers = ["sourcekit-lsp"]
