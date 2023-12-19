@@ -36,7 +36,12 @@ display-messages = true
 S-tab = ":format"
 D = ["extend_to_line_end", "delete_selection_noyank"]
 V = "extend_line"
+"š" = ":write"
 
 [keys.insert]
+"ñ" = "normal_mode"
 S-tab = ":format"
 # C-s = ":write" # conflict with "commit_undo_checkpoint"
+"š" = ":write"
+"ñ" = "normal_mode"
+"š" = ":write"
