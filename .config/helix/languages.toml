@@ -21,7 +21,13 @@ config.hints.rangeVariableTypes = true
 
 [language-server.golangci-lint-lsp]
 command = "golangci-lint-langserver"
-config.command = ["golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1"]
+config.command = [
+  "golangci-lint",
+  "run",
+  "--out-format",
+  "json",
+  "--issues-exit-code=1",
+]
 
 [language-server.elixir-ls]
 command = "elixir-ls"
@@ -97,7 +103,7 @@ config.inlayHints.parameterType.enabled = true
 config.inlayHints.propertyDeclarationTypes.enabled = true
 config.inlayHints.variableTypes.enabled = true
 config.inlayHints.variableTypes.suppressWhenTypeMatchesName = true
-config.maxTsServerMemory = 2048 # 2GB
+config.maxTsServerMemory = 2048                                         # 2GB
 
 [language-server]
 taplo = { command = "taplo", args = ["lsp", "stdio"] }
@@ -105,17 +111,23 @@ biome = { command = "biome", args = ["lsp-proxy"] }
 pylsp = { commad = "pylsp" }
 clangd = { command = "clangd" }
 ols = { command = "ols" }
-omnisharp = { command = "OmniSharp", args = [ "--languageserver" ] }
-vscode-typescript = { command = "typescript-language-server", args = ["stdio"] }
+omnisharp = { command = "OmniSharp", args = ["--languageserver"] }
+vscode-typescript = { command = "typescript-language-server", args = [
+  "--stdio",
+] }
 templ = { command = "templ", args = ["lsp"] }
-nil = { command = "nil", config = { nil = { formatting = { command = ["nixfmt"] } } } }
+nil = { command = "nil", config = { nil = { formatting = { command = [
+  "alejandra",
+] } } } }
 bash-lsp = { command = "bash-language-server", args = ["start"] }
 zls = { command = "zls" }
 wgsl-analyzer = { command = "wgsl-analyzer" }
 marksman = { command = "marksman", args = ["server"] }
 dart = { command = "dart", args = ["language-server", "--client-id=helix"] }
 kotlin-language-server = { command = "kotlin-language-server" }
-rescript-language-server = { command = "rescript-language-server", args = ["--stdio"] }
+rescript-language-server = { command = "rescript-language-server", args = [
+  "--stdio",
+] }
 sourcekit-lsp = { command = "sourcekit-lsp" }
 
 # NOTE: if deno/vscode lsp not work, it may need `language-id = "..."`
@@ -175,7 +187,7 @@ indent = { tab-width = 4, unit = "    " }
 name = "c"
 scope = "source.c"
 injection-regex = "c"
-file-types = ["c"] # TODO: ["h"]
+file-types = ["c"]                      # TODO: ["h"]
 roots = []
 comment-token = "//"
 auto-format = true
@@ -186,7 +198,20 @@ language-servers = ["clangd"]
 name = "cpp"
 scope = "source.cpp"
 injection-regex = "cpp"
-file-types = ["cc", "hh", "cpp", "hpp", "h", "ipp", "tpp", "cxx", "hxx", "ixx", "txx", "ino"]
+file-types = [
+  "cc",
+  "hh",
+  "cpp",
+  "hpp",
+  "h",
+  "ipp",
+  "tpp",
+  "cxx",
+  "hxx",
+  "ixx",
+  "txx",
+  "ino",
+]
 roots = []
 comment-token = "//"
 auto-format = true
@@ -222,7 +247,10 @@ roots = ["go.work", "go.mod"]
 auto-format = true
 comment-token = "//"
 indent = { tab-width = 4, unit = "\t" }
-language-servers = ["gopls", "golangci-lint-lsp"] # TODO: gopls needs utf-8 offsets?
+language-servers = [
+  "gopls",
+  "golangci-lint-lsp",
+] # TODO: gopls needs utf-8 offsets?
 
 [[language]]
 name = "templ"
@@ -231,10 +259,7 @@ file-types = ["templ"]
 roots = ["go.work", "go.mod"]
 comment-token = "//"
 indent = { tab-width = 2, unit = "  " }
-language-servers = [
-  "templ",
-  "tailwindcss",
-]
+language-servers = ["templ", "tailwindcss"]
 
 [[language]]
 name = "json"
@@ -273,11 +298,7 @@ comment-token = "//"
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-language-servers = [
-  "deno",
-  "biome",
-  "tailwindcss",
-]
+language-servers = ["deno", "biome", "tailwindcss"]
 # formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.jsx"] }
 
 [[language]]
@@ -305,11 +326,7 @@ comment-token = "//"
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 diagnostic-severity = "Hint"
-language-servers = [
-  "deno",
-  "biome",
-  "tailwindcss",
-]
+language-servers = ["deno", "biome", "tailwindcss"]
 # formatter = { command = "biome", args = ["format", "--write", "--stdin-file-path=file.tsx"] }
 
 [[language]]
@@ -320,21 +337,32 @@ file-types = ["css"]
 roots = ["index.html"]
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["vscode-css"]
-formatter = { command = 'prettier', args = ["--parser", "css", "--plugin-search-dir=/home/wildan/.asdf/installs/nodejs/18.8.0/.npm/lib/node_modules"] }
+formatter = { command = 'prettier', args = [
+  "--parser",
+  "css",
+  "--plugin-search-dir=/home/wildan/.asdf/installs/nodejs/18.8.0/.npm/lib/node_modules",
+] }
 # formatter = { command = "sass", args = ["--stdin"] } # too powerful that make PostCSS mostly useless 😂
 
 [[language]]
 name = "html"
 scope = "text.html.basic"
 injection-regex = "html"
-file-types = ["html", "htm", "njk", "django", "jinja", "erb", "mustache", "hbs", "php"]
+file-types = [
+  "html",
+  "htm",
+  "njk",
+  "django",
+  "jinja",
+  "erb",
+  "mustache",
+  "hbs",
+  "php",
+]
 roots = []
 auto-format = false
 indent = { tab-width = 2, unit = "  " }
-language-servers = [
-  "vscode-html",
-  "tailwindcss",
-]
+language-servers = ["vscode-html", "tailwindcss"]
 # formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
 
 [[language]]
@@ -345,11 +373,11 @@ file-types = ["ejs"]
 roots = ["index.ejs"]
 auto-format = false
 indent = { tab-width = 2, unit = " " }
-language-servers = [
-  "vscode-html",
-  "tailwindcss",
-]
-formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
+language-servers = ["vscode-html", "tailwindcss"]
+formatter = { command = "djlint", args = [
+  "-",
+  "--reformat",
+] } #, "--format-js", "--format-css"] }
 
 
 [[language]]
@@ -361,7 +389,7 @@ shebangs = ["python"]
 roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
 comment-token = "#"
 indent = { tab-width = 4, unit = "    " }
-language-servers = ["pylsp"] # TODO: pyls needs utf-8 offsets
+language-servers = ["pylsp"]                                                # TODO: pyls needs utf-8 offsets
 
 [[language]]
 name = "nix"
@@ -378,7 +406,21 @@ language-servers = ["nil"]
 name = "bash"
 scope = "source.bash"
 injection-regex = "bash"
-file-types = ["sh", "bash", "zsh", ".bash_login", ".bash_logout", ".bash_profile", ".bashrc", ".profile", ".zshenv", ".zlogin", ".zlogout", ".zprofile", ".zshrc"]
+file-types = [
+  "sh",
+  "bash",
+  "zsh",
+  ".bash_login",
+  ".bash_logout",
+  ".bash_profile",
+  ".bashrc",
+  ".profile",
+  ".zshenv",
+  ".zlogin",
+  ".zlogout",
+  ".zprofile",
+  ".zshrc",
+]
 shebangs = ["sh", "bash", "dash"]
 roots = []
 comment-token = "#"
@@ -420,14 +462,14 @@ language-servers = ["zls"]
 name = "make"
 scope = "source.make"
 file-types = ["Makefile", "makefile", "mk", "justfile", ".justfile"]
-roots =[]
+roots = []
 comment-token = "#"
 indent = { tab-width = 4, unit = "\t" }
 
 [[language]]
 name = "glsl"
 scope = "source.glsl"
-file-types = ["glsl", "vert", "tesc", "tese", "geom", "frag", "comp" ]
+file-types = ["glsl", "vert", "tesc", "tese", "geom", "frag", "comp"]
 roots = []
 comment-token = "//"
 indent = { tab-width = 4, unit = "    " }
@@ -629,7 +671,7 @@ file-types = ["kt", "kts"]
 roots = ["settings.gradle", "settings.gradle.kts"]
 comment-token = "//"
 indent = { tab-width = 4, unit = "    " }
-language-servers = ["kotlin-language-server"] 
+language-servers = ["kotlin-language-server"]
 
 [[language]]
 name = "swift"
