@@ -1,5 +1,5 @@
 [use-grammars]
-only = ["pomsky", "wat", "wast"]
+only = ["pomsky", "wat", "wast", "markdown"]
 
 [language-server.rust-analyzer]
 command = "rust-analyzer"
@@ -554,14 +554,21 @@ auto-format = true
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["marksman"]
 
-[[language]]
+[[grammar]]
 name = "markdown"
-scope = "source.md"
-injection-regex = "md|markdown"
-file-types = ["md"]
-roots = []
+source = { git = "https://github.com/MDeiml/tree-sitter-markdown", rev = "f9820b2db958228f9be339b67d2de874d065866e", subpath = "tree-sitter-markdown" }
 
-indent = { tab-width = 2, unit = "  " }
+[[language]]
+name = "markdown.inline"
+scope = "source.markdown.inline"
+injection-regex = "markdown\\.inline"
+file-types = []
+roots = []
+grammar = "markdown_inline"
+
+[[grammar]]
+name = "markdown_inline"
+source = { git = "https://github.com/MDeiml/tree-sitter-markdown", rev = "f9820b2db958228f9be339b67d2de874d065866e", subpath = "tree-sitter-markdown-inline" }
 
 [[language]]
 name = "dart"
