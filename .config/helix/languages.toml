@@ -358,6 +358,27 @@ formatter = { command = 'prettier', args = [
 ] }
 # formatter = { command = "sass", args = ["--stdin"] } # too powerful that make PostCSS mostly useless 😂
 
+# [[language]]
+# name = "alpinejs"
+# scope = "text.html.alpinejs"
+# injection-regex = "html|alpinejs"
+# file-types = [
+#   "html",
+#   "htm",
+#   "njk",
+#   "django",
+#   "jinja",
+#   "erb",
+#   "mustache",
+#   "hbs",
+#   "php",
+# ]
+# roots = []
+# auto-format = false
+# indent = { tab-width = 2, unit = "  " }
+# language-servers = ["vscode-html", "tailwindcss"]
+# # formatter = { command = "djlint", args = ["-", "--reformat"] } #, "--format-js", "--format-css"] }
+
 [[language]]
 name = "html"
 scope = "text.html.basic"
