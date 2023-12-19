@@ -5,11 +5,15 @@ end
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish#L20
 set -x MANPAGER "sh -c 'col -b | bat -l man -p'"
 
-alias project-tree "exa --git-ignore --tree --all -I .git"
+alias worktree "exa --git-ignore --tree --all -I .git --group-directories-first --long --no-permissions --no-user --no-time"
+alias filetree "exa --tree --all --group-directories-first --long --no-permissions --no-user --no-time"
 alias task dstask
 alias open "handlr open" # also please manually install `xdg-utils-handlr` which automatically replace😞`xdg-utils` then shim `xdg-open`
 
 alias snippet the-way
+
+alias wt worktree
+alias ft filetree
 
 function vi_cursor # alacritty workaround https://github.com/fish-shell/fish-shell/issues/7458
   switch $fish_bind_mode # BUG: this already fixed in the upstream but somehow it doesn't works
