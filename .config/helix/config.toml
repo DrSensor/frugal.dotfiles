@@ -11,6 +11,7 @@ cursorline = true
 color-modes = true
 completion-trigger-len = 1
 idle-timeout = 0
+true-color = true
 
 [editor.indent-guides]
 render = true
@@ -38,4 +39,4 @@ V = "extend_line"
 
 [keys.insert]
 S-tab = ":format"
-C-s = ":write"
+# C-s = ":write" # conflict with "commit_undo_checkpoint"
