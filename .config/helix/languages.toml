@@ -85,6 +85,10 @@ command = "tailwindcss-language-server"
 args = ["--stdio"]
 config.includeLanguages = { templ = "html" }
 
+[language-server.sql-lsp]
+command = "sql-language-server"
+args = ["up", "--method", "stdio"]
+
 [language-server.deno]
 command = "deno"
 args = ["lsp"]
@@ -161,6 +165,16 @@ file-types = ["proto"]
 roots = []
 comment-token = "//"
 indent = { tab-width = 2, unit = "  " }
+
+[[language]]
+name = "sql"
+scope = "source.sql"
+file-types = ["sql", "dsql"]
+roots = []
+comment-token = "--"
+indent = { tab-width = 4, unit = "    " }
+injection-regex = "sql"
+language-servers = ["sql-lsp"]
 
 [[language]]
 name = "elixir"
