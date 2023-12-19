@@ -7,6 +7,8 @@ set -x MANPAGER "sh -c 'col -b | bat -l man -p'"
 
 alias worktree "exa --git-ignore --tree --all -I .git --group-directories-first --long --no-permissions --no-user --no-time"
 alias filetree "exa --tree --all --group-directories-first --long --no-permissions --no-user --no-time"
+alias peek "bat --style=header,grid,snip --paging=never"
+alias commit "git commit --message"
 alias task dstask
 alias open "handlr open" # also please manually install `xdg-utils-handlr` which automatically replace😞`xdg-utils` then shim `xdg-open`
 
